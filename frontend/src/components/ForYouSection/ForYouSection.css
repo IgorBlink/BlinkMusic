@@ -1,0 +1,64 @@
+.for-you-section {
+  margin-bottom: 0;
+  width: 100%;
+  padding: 24px 0;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 0 24px;
+}
+
+.section-header h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.see-all-button {
+  background-color: transparent;
+  color: var(--text-color);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.see-all-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.see-all-button svg {
+  font-size: 20px;
+}
+
+.music-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+  padding: 0 24px;
+}
+
+@media (min-width: 1440px) {
+  .music-cards-container {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .music-cards-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .music-cards-container {
+    grid-template-columns: 1fr;
+  }
+} 

@@ -1,0 +1,251 @@
+.mini-player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(25, 20, 20, 0.95);
+  backdrop-filter: blur(10px);
+  height: 80px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 1000;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-left: 280px;
+  width: calc(100% - 280px);
+  overflow: hidden;
+  border-radius: 8px 8px 0 0;
+}
+
+.track-info {
+  display: flex;
+  align-items: center;
+  width: 25%;
+  height: 60px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  margin: 0 12px;
+  border-radius: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.track-info:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.track-info:active {
+  transform: translateY(0);
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.track-info::after {
+  content: "Открыть";
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.track-info:hover::after {
+  opacity: 1;
+}
+
+.track-cover {
+  width: 50px;
+  height: 50px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-right: 12px;
+  transition: transform 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+}
+
+.track-info:hover .track-cover {
+  transform: scale(1.03);
+}
+
+.track-info:active .track-cover {
+  transform: scale(1);
+}
+
+.track-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.track-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.track-details h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-color);
+  transition: color 0.2s ease;
+}
+
+.track-details p {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 4px 0 0;
+  transition: color 0.2s ease;
+}
+
+.track-info:hover .track-details h4 {
+  color: var(--primary-color);
+}
+
+.track-info:hover .track-details p {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.player-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 20px;
+}
+
+.time-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  margin-left: 12px;
+}
+
+.current-time, .total-time {
+  font-family: monospace;
+  min-width: 40px;
+}
+
+.time-separator {
+  margin: 0 4px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.control-button, .play-pause-button, .action-button {
+  background-color: transparent;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.control-button {
+  font-size: 16px;
+}
+
+.control-button:hover {
+  color: var(--primary-color);
+}
+
+.play-pause-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 14px;
+}
+
+.play-pause-button:hover {
+  transform: scale(1.05);
+  background-color: var(--hover-color);
+}
+
+.player-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  cursor: pointer;
+}
+
+.progress-bar:hover .progress-current {
+  background-color: var(--hover-color);
+}
+
+.progress-current {
+  position: absolute;
+  height: 100%;
+  background-color: var(--primary-color);
+  width: 0;
+  transition: width 0.1s linear;
+}
+
+.player-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 25%;
+  min-width: 150px;
+  justify-content: flex-end;
+}
+
+.action-button {
+  font-size: 16px;
+  opacity: 0.8;
+}
+
+.action-button:hover {
+  opacity: 1;
+  color: var(--primary-color);
+}
+
+@media (max-width: 992px) {
+  .mini-player {
+    margin-left: 80px;
+    width: calc(100% - 80px);
+  }
+  
+  .track-info {
+    width: 30%;
+    min-width: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .player-actions {
+    width: 20%;
+    min-width: 100px;
+  }
+  
+  .track-details h4 {
+    max-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+} 

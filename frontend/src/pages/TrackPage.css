@@ -1,0 +1,838 @@
+.track-page {
+  min-height: 100vh;
+  background: #121212;
+  color: #fff;
+  padding: 0;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.back-button-container {
+  display: flex;
+  padding: 1rem;
+  position: fixed;
+  top: 0;
+  
+  z-index: 10;
+}
+
+.back-button {
+  background: rgba(65, 105, 225, 0.15);
+  border: none;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+.back-button:hover {
+  background-color: rgba(65, 105, 225, 0.3);
+}
+
+.track-content {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 100vh;
+  padding: 0;
+}
+
+.track-cover-container {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.track-cover-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 1/1;
+  margin-bottom: 1rem;
+}
+
+.track-page-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.track-info-header {
+  margin-top: 1.5rem;
+  width: 100%;
+  text-align: center;
+}
+
+.track-main-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.track-title {
+  font-size: 1.6rem;
+  margin: 0 0 0.3rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.track-artist {
+  font-size: 1rem;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.track-progress-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-top: 1.5rem;
+  gap: 0.8rem;
+}
+
+.track-play-button {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background-color: #4169e1;
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.track-play-button:hover {
+  transform: scale(1.05);
+  background-color: #5078f2;
+}
+
+.track-progress-bar {
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  flex-grow: 1;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.track-progress-current {
+  height: 100%;
+  background-color: #4169e1;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: width 0.1s linear;
+}
+
+.track-time-current, .track-time-total {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  width: 40px;
+}
+
+.track-time-current {
+  text-align: right;
+}
+
+/* Стили для лирики */
+.lyrics-container {
+  width: 60%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-y: auto;
+  max-height: 90vh;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(65, 105, 225, 0.4) rgba(18, 18, 18, 0.5);
+  padding-bottom: 4rem;
+}
+
+.lyrics-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  position: relative;
+  padding: 1rem 0;
+  margin: 2rem 0;
+  padding-top: 25vh;
+  padding-bottom: 25vh;
+}
+
+.lyrics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 0;
+  background-color: rgba(18, 18, 18, 0.95);
+  z-index: 10;
+  padding-top: 0.5rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.lyrics-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.lyric-line {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0.5rem;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  text-align: center;
+  position: relative;
+  margin: 0.7rem 0;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-origin: center;
+}
+
+.lyric-line:hover {
+  opacity: 0.8;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.lyric-line.active {
+  opacity: 1;
+  position: relative;
+  transform: scale(1.05) translateY(0);
+  z-index: 5;
+  background-color: rgba(65, 105, 225, 0.1);
+  text-shadow: 0 0 10px rgba(65, 105, 225, 0.5);
+}
+
+/* Плавное увеличение размера текста для активной строки */
+.lyrics-text {
+  font-size: 1.2rem;
+  line-height: 1.4;
+  margin: 0;
+  color: #fff;
+  transition: all 0.3s ease;
+  text-align: center;
+  width: 100%;
+}
+
+.lyric-line.active .lyrics-text {
+  font-size: 1.8rem;
+  line-height: 1.2;
+  color: #fff;
+  font-weight: 600;
+}
+
+.lyric-line.next-active .lyrics-text {
+  font-size: 1.4rem;
+  line-height: 1.3;
+  color: #fff;
+}
+
+.auto-scroll-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 0.4rem 0.8rem;
+  border-radius: 16px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.auto-scroll-toggle.active {
+  background-color: rgba(65, 105, 225, 0.6);
+  color: #fff;
+}
+
+.auto-scroll-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.auto-scroll-toggle.active:hover {
+  background-color: rgba(65, 105, 225, 0.8);
+}
+
+/* Медиа-запросы - адаптируем стили для разных устройств */
+@media (max-width: 900px) {
+  .lyrics-container {
+    width: 100%;
+    max-height: 50vh;
+    padding: 1rem;
+  }
+  
+  .track-content {
+    flex-direction: column;
+  }
+  
+  .track-cover-container {
+    width: 100%;
+    padding-bottom: 0;
+  }
+  
+  .lyrics-content {
+    padding-top: 15vh;
+    padding-bottom: 15vh;
+  }
+}
+
+@media (max-width: 600px) {
+  .lyrics-controls {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+  
+  .lyrics-header h3 {
+    font-size: 1rem;
+  }
+  
+  .auto-scroll-toggle {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+  }
+  
+  .lyric-line.active .lyrics-text {
+    font-size: 1.5rem;
+  }
+  
+  .lyric-line.next-active .lyrics-text {
+    font-size: 1.2rem;
+  }
+  
+  .lyrics-content {
+    padding-top: 10vh;
+    padding-bottom: 10vh;
+  }
+}
+
+.track-progress-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  margin: 1rem 0;
+  gap: 0.8rem;
+}
+
+.track-progress-bar {
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  flex-grow: 1;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.track-progress-current {
+  height: 100%;
+  background-color: #4169e1;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: width 0.1s linear;
+}
+
+.track-time-current, .track-time-total {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  width: 40px;
+}
+
+.track-time-current {
+  text-align: right;
+}
+
+.lyrics-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.lyrics-container::-webkit-scrollbar-track {
+  background: rgba(18, 18, 18, 0.5);
+  border-radius: 3px;
+}
+
+.lyrics-container::-webkit-scrollbar-thumb {
+  background-color: rgba(65, 105, 225, 0.4);
+  border-radius: 3px;
+}
+
+.lyrics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: -1px;
+  background-color: rgba(18, 18, 18, 0.95);
+  z-index: 5;
+  padding-top: 0.5rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.lyrics-header h3 {
+  font-size: 1.2rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+.lyrics-scroll-indicator {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 3px;
+  height: 0;
+  background: linear-gradient(to bottom, rgba(65, 105, 225, 0.8), rgba(65, 105, 225, 0.2));
+  border-radius: 3px;
+  transition: height 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+  z-index: 4;
+}
+
+.lyrics-scroll-indicator.visible {
+  opacity: 1;
+}
+
+.lyric-time {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  margin-right: 1rem;
+  min-width: 38px;
+  text-align: right;
+  padding-top: 0.2rem;
+}
+
+.lyrics-footer {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+}
+
+/* Плавающий заголовок */
+.track-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(18, 18, 18, 0.95);
+  padding: 0.8rem 1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+}
+
+.track-header.visible {
+  transform: translateY(0);
+}
+
+.floating-track-info {
+  display: flex;
+  align-items: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.mini-cover {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-right: 1rem;
+}
+
+.mini-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.floating-track-details {
+  flex-grow: 1;
+}
+
+.floating-track-details h3 {
+  font-size: 0.9rem;
+  margin: 0 0 0.2rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.floating-track-details p {
+  font-size: 0.8rem;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.floating-play-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: rgba(65, 105, 225, 0.9);
+  border: none;
+  color: #fff;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.floating-play-button:hover {
+  background-color: rgba(65, 105, 225, 1);
+}
+
+/* Стили для "трек не выбран" */
+.no-track {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-track-message {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.no-track-message h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.no-track-message p {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Медиа-запросы для адаптивности */
+@media (max-width: 600px) {
+  .track-cover-wrapper {
+    max-width: 280px;
+  }
+  
+  .track-title {
+    font-size: 1.3rem;
+  }
+  
+  .track-artist {
+    font-size: 0.9rem;
+  }
+  
+  .lyrics-text {
+    font-size: 1rem;
+  }
+  
+  .lyric-line.active .lyrics-text {
+    font-size: 2.5rem;
+  }
+  
+  .lyric-line.next-active .lyrics-text {
+    font-size: 1.5rem;
+  }
+  
+  .track-play-button {
+    width: 48px;
+    height: 48px;
+    font-size: 18px;
+    bottom: 1rem;
+    right: 1rem;
+  }
+  
+  .lyrics-container {
+    max-height: 55vh;
+  }
+}
+
+@media (max-width: 400px) {
+  .track-cover-wrapper {
+    max-width: 220px;
+  }
+  
+  .track-title {
+    font-size: 1.1rem;
+  }
+  
+  .track-artist {
+    font-size: 0.8rem;
+  }
+  
+  .lyrics-text {
+    font-size: 0.9rem;
+  }
+  
+  .track-play-button {
+    width: 42px;
+    height: 42px;
+    font-size: 16px;
+  }
+  
+  .lyric-time {
+    min-width: 34px;
+    font-size: 0.7rem;
+  }
+  
+  .lyrics-container {
+    padding: 1rem;
+    max-height: 50vh;
+  }
+}
+
+.lyric-line-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.annotation-button {
+  position: absolute;
+  right: -34px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  opacity: 0;
+  padding: 0;
+  font-size: 18px;
+}
+
+.lyric-line:hover .annotation-button {
+  opacity: 1;
+}
+
+.lyric-line.active .annotation-button {
+  opacity: 1;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.annotation-button:hover {
+  background-color: rgba(65, 105, 225, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+  transform: scale(1.05);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-icon {
+  animation: spin 1.2s linear infinite;
+  color: rgba(65, 105, 225, 0.9);
+}
+
+.lyric-annotation {
+  background-color: rgba(20, 20, 30, 0.95);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 12px auto;
+  max-width: 90%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(65, 105, 225, 0.3);
+  overflow: hidden;
+  animation: fadeIn 0.3s ease;
+  backdrop-filter: blur(10px);
+  width: 80%;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.annotation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 8px;
+}
+
+.annotation-header h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(65, 105, 225, 0.9);
+}
+
+.close-annotation {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.close-annotation:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.annotation-content {
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.2px;
+}
+
+.loading-text {
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+}
+
+.lyric-line.has-annotation .annotation-button {
+  color: rgba(65, 105, 225, 0.9);
+  opacity: 1;
+}
+
+.lyrics-info {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+}
+
+.lyrics-info span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Модификации существующих стилей для лучшего взаимодействия с аннотациями */
+.lyric-line {
+  margin-bottom: 24px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.lyric-line.active {
+  margin-bottom: 32px;
+}
+
+.lyric-line.has-annotation {
+  margin-bottom: 36px;
+}
+
+.lyric-line.active.has-annotation {
+  margin-bottom: 48px;
+}
+
+/* Адаптивность */
+@media (max-width: 900px) {
+  .lyric-annotation {
+    width: 85%;
+  }
+  
+  .annotation-button {
+    right: -24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .lyric-annotation {
+    width: 90%;
+    padding: 12px;
+  }
+  
+  .annotation-content {
+    font-size: 13px;
+  }
+  
+  .annotation-button {
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
+    right: -20px;
+  }
+  
+  .lyrics-info {
+    display: none;
+  }
+}
+
+/* Добавляем индикатор скролла */
+.scroll-indicator {
+  position: absolute;
+  right: 10px;
+  bottom: 60px;
+  background-color: rgba(65, 105, 225, 0.6);
+  color: white;
+  font-size: 0.8rem;
+  padding: 4px 10px;
+  border-radius: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  backdrop-filter: blur(4px);
+}
+
+.lyrics-container:hover .scroll-indicator {
+  opacity: 0.8;
+}
+
+/* Стилизация активной строки для лучшего выделения */
+.lyric-line.active::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -4px;
+  width: 40px;
+  height: 2px;
+  background: rgba(65, 105, 225, 0.8);
+  border-radius: 2px;
+} 

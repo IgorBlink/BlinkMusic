@@ -1,0 +1,130 @@
+.mywave-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.mywave-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 16px;
+}
+
+.mywave-header h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #333;
+}
+
+.customize-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #2970ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.customize-button:hover {
+  background-color: #1a5dc7;
+}
+
+.customize-button svg {
+  font-size: 20px;
+}
+
+.selected-settings {
+  background-color: #f5f8ff;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.selected-settings h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 18px;
+  color: #333;
+}
+
+.selected-settings ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.selected-settings li {
+  display: flex;
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.selected-settings .setting-label {
+  font-weight: 600;
+  color: #555;
+  margin-right: 8px;
+  min-width: 100px;
+}
+
+.selected-settings .setting-value {
+  color: #1a5dc7;
+  font-weight: 500;
+}
+
+.selected-settings .no-settings {
+  color: #888;
+  font-style: italic;
+  text-align: center;
+  justify-content: center;
+}
+
+.mywave-content {
+  background-color: white;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.placeholder-content {
+  text-align: center;
+  padding: 48px 24px;
+  color: #777;
+}
+
+.placeholder-content p {
+  margin: 8px 0;
+}
+
+/* Адаптивный дизайн */
+@media (max-width: 768px) {
+  .mywave-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .customize-button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .selected-settings li {
+    flex-direction: column;
+  }
+  
+  .selected-settings .setting-label {
+    margin-bottom: 4px;
+  }
+} 
