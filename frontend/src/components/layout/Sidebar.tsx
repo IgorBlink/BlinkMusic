@@ -2,11 +2,15 @@ import { Link, useLocation } from 'react-router-dom';
 import { FiSearch } from 'react-icons/fi';
 import { AiOutlineHome } from 'react-icons/ai';
 import { FaHeart } from 'react-icons/fa';
+import { FiLogIn } from 'react-icons/fi';
+import { useAuth } from '../../context/AuthContext';
+import UserProfileMenu from './UserProfileMenu';
 import './Sidebar.css';
 
 const Sidebar = () => {
   const location = useLocation();
   const { pathname } = location;
+  const { isAuthenticated } = useAuth();
   
   return (
     <div className="sidebar">
@@ -41,6 +45,17 @@ const Sidebar = () => {
           </li>
         </ul>
       </nav>
+      
+      <div className="sidebar-footer">
+        {isAuthenticated ? (
+          <UserProfileMenu />
+        ) : (
+          <Link to="/login" className="login-button">
+            <FiLogIn className="login-icon" />
+            <span>Войти</span>
+          </Link>
+        )}
+      </div>
     </div>
   );
 };

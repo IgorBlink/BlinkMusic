@@ -18,7 +18,9 @@ const MiniPlayer = () => {
     isMuted,
     togglePlay, 
     toggleMute,
-    setProgress
+    setProgress,
+    loadNextTrack,
+    loadPreviousTrack
   } = usePlayer();
   
   const progressBarRef = useRef<HTMLDivElement>(null);
@@ -57,7 +59,14 @@ const MiniPlayer = () => {
     <div className="mini-player">
       <div className="track-info" onClick={handleTrackInfoClick}>
         <div className="track-cover">
-          <img src={testPicture} alt={currentTrack.title} />
+          <img 
+            src={currentTrack.coverUrl || currentTrack.cover || testPicture} 
+            alt={currentTrack.title} 
+            onError={(e) => {
+              // Если не удалось загрузить изображение, используем запасное
+              (e.target as HTMLImageElement).src = testPicture;
+            }}
+          />
         </div>
         <div className="track-details">
           <h4>{currentTrack.title}</h4>
@@ -66,7 +75,12 @@ const MiniPlayer = () => {
       </div>
       
       <div className="player-controls">
-        <button className="control-button" aria-label="Previous" title="Предыдущий трек">
+        <button 
+          className="control-button" 
+          aria-label="Previous" 
+          title="Предыдущий трек"
+          onClick={loadPreviousTrack}
+        >
           <FaStepBackward />
         </button>
         
@@ -79,7 +93,12 @@ const MiniPlayer = () => {
           {isPlaying ? <FaPause /> : <FaPlay />}
         </button>
         
-        <button className="control-button" aria-label="Next" title="Следующий трек">
+        <button 
+          className="control-button" 
+          aria-label="Next" 
+          title="Следующий трек"
+          onClick={loadNextTrack}
+        >
           <FaStepForward />
         </button>
         

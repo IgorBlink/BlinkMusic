@@ -53,6 +53,7 @@
 
 .sidebar-nav {
   margin-top: 20px;
+  flex: 1;
 }
 
 .sidebar-nav ul {
@@ -86,12 +87,45 @@
   margin-right: 16px;
 }
 
+/* Стили для кнопки входа */
+.sidebar-footer {
+  margin-top: auto;
+  padding: 24px;
+  border-top: 1px solid rgba(65, 105, 225, 0.15);
+}
+
+.login-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background-color: rgba(65, 105, 225, 0.15);
+  color: var(--text-color);
+  text-decoration: none;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(65, 105, 225, 0.3);
+  backdrop-filter: blur(5px);
+}
+
+.login-button:hover {
+  background-color: rgba(65, 105, 225, 0.3);
+  box-shadow: 0 0 15px rgba(65, 105, 225, 0.4);
+  transform: translateY(-2px);
+}
+
+.login-icon {
+  font-size: 18px;
+}
+
 @media (max-width: 992px) {
   .sidebar {
     width: 80px;
   }
   
-  .logo-text, .nav-item span {
+  .logo-text, .nav-item span, .login-button span {
     display: none;
   }
   
@@ -107,5 +141,25 @@
   .nav-icon {
     margin-right: 0;
     font-size: 24px;
+  }
+  
+  .sidebar-footer {
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .login-button {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .login-icon {
+    margin: 0;
   }
 } 

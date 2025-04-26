@@ -1,0 +1,226 @@
+# Руководство по использованию API для получения текстов песен (лирики) в BlinkMusic
+
+## Введение
+
+BlinkMusic предоставляет удобный API для получения текстов песен непосредственно из YouTube субтитров. Эта функциональность позволяет получать тексты песен двумя способами:
+1. По ID трека в базе данных BlinkMusic
+2. Напрямую по URL видео YouTube
+
+В обоих случаях можно получить как простой текст, так и синхронизированный с таймкодами.
+
+## Эндпоинты API
+
+### 1. Получение лирики по ID трека
+
+```
+GET /api/lyrics/track/:id
+```
+
+Параметры:
+- `:id` - ID трека в базе данных BlinkMusic
+- `timestamped` (query parameter, boolean) - если true, вернет лирику с таймкодами
+
+Пример запроса:
+```bash
+# Получение обычного текста
+curl http://localhost:5000/api/lyrics/track/6505a4b37d8e56f60c3aef12
+
+# Получение текста с таймкодами
+curl http://localhost:5000/api/lyrics/track/6505a4b37d8e56f60c3aef12?timestamped=true
+```
+
+### 2. Получение лирики по URL YouTube
+
+```
+GET /api/lyrics/youtube
+```
+
+Параметры:
+- `url` (query parameter) - полный URL видео YouTube
+- `timestamped` (query parameter, boolean) - если true, вернет лирику с таймкодами
+
+Пример запроса:
+```bash
+# Получение обычного текста
+curl "http://localhost:5000/api/lyrics/youtube?url=https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+
+# Получение текста с таймкодами
+curl "http://localhost:5000/api/lyrics/youtube?url=https://www.youtube.com/watch?v=dQw4w9WgXcQ&timestamped=true"
+```
+
+## Формат ответа
+
+### Успешный ответ (без таймкодов)
+
+```json
+{
+  "success": true,
+  "youtubeUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+  "lyrics": "We're no strangers to love\nYou know the rules and so do I\nA full commitment's what I'm thinking of\nYou wouldn't get this from any other guy..."
+}
+```
+
+### Успешный ответ (с таймкодами)
+
+```json
+{
+  "success": true,
+  "youtubeUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+  "lyrics": [
+    {
+      "text": "We're no strangers to love",
+      "startTime": 18800,
+      "endTime": 21200
+    },
+    {
+      "text": "You know the rules and so do I",
+      "startTime": 21200,
+      "endTime": 25600
+    },
+    ...
+  ]
+}
+```
+
+### Ответ с ошибкой
+
+```json
+{
+  "success": false,
+  "message": "Текст песни не найден"
+}
+```
+
+## Примеры использования API в приложении
+
+### Базовое получение текста песни
+
+```javascript
+async function getLyrics(trackId) {
+  try {
+    const response = await fetch(`/api/lyrics/track/${trackId}`);
+    const data = await response.json();
+    
+    if (data.success) {
+      return data.lyrics;
+    } else {
+      console.error('Ошибка получения текста:', data.message);
+      return null;
+    }
+  } catch (error) {
+    console.error('Ошибка запроса:', error);
+    return null;
+  }
+}
+```
+
+### Отображение синхронизированного текста во время воспроизведения
+
+```javascript
+// Получение синхронизированного текста
+async function getLyricsWithTimestamps(trackId) {
+  try {
+    const response = await fetch(`/api/lyrics/track/${trackId}?timestamped=true`);
+    const data = await response.json();
+    
+    if (data.success) {
+      return data.lyrics; // массив объектов с текстом и таймкодами
+    } else {
+      console.error('Ошибка получения текста:', data.message);
+      return null;
+    }
+  } catch (error) {
+    console.error('Ошибка запроса:', error);
+    return null;
+  }
+}
+
+// Функция для отображения текущей строки текста
+function showCurrentLyrics(lyricsWithTimestamps, currentTimeMs) {
+  if (!lyricsWithTimestamps) return;
+  
+  // Находим текущую строку по времени
+  const currentLine = lyricsWithTimestamps.find(
+    line => currentTimeMs >= line.startTime && currentTimeMs <= line.endTime
+  );
+  
+  // Отображаем текст
+  if (currentLine) {
+    document.getElementById('lyrics-display').textContent = currentLine.text;
+    // Также можно добавить класс для анимации
+    document.getElementById('lyrics-display').classList.add('active-line');
+  }
+}
+
+// Использование с аудиоплеером
+let lyricsData = null;
+
+// При загрузке трека
+async function loadTrack(trackId) {
+  // ... загрузка аудио ...
+  
+  // Загружаем текст песни
+  lyricsData = await getLyricsWithTimestamps(trackId);
+  
+  // Инициализируем дисплей
+  if (lyricsData) {
+    document.getElementById('lyrics-container').style.display = 'block';
+  } else {
+    document.getElementById('lyrics-container').style.display = 'none';
+  }
+}
+
+// При обновлении времени воспроизведения
+audioPlayer.addEventListener('timeupdate', function() {
+  // Преобразуем время в миллисекунды
+  const currentTimeMs = audioPlayer.currentTime * 1000;
+  
+  // Обновляем отображение текста
+  showCurrentLyrics(lyricsData, currentTimeMs);
+});
+```
+
+### Получение лирики по YouTube URL для любого видео
+
+```javascript
+async function getLyricsByYoutubeUrl(youtubeUrl) {
+  try {
+    const response = await fetch(`/api/lyrics/youtube?url=${encodeURIComponent(youtubeUrl)}`);
+    const data = await response.json();
+    
+    if (data.success) {
+      return data.lyrics;
+    } else {
+      console.error('Ошибка получения текста:', data.message);
+      return null;
+    }
+  } catch (error) {
+    console.error('Ошибка запроса:', error);
+    return null;
+  }
+}
+```
+
+## Ограничения и особенности
+
+1. **Доступность субтитров** - API работает только с видео, у которых есть субтитры на YouTube. Если у видео нет субтитров, API вернет ошибку.
+
+2. **Качество лирики** - качество текста зависит от качества субтитров на YouTube. Некоторые видео могут иметь неполные или неточные субтитры.
+
+3. **Кэширование** - система кэширует полученные тексты в базе данных, чтобы уменьшить количество запросов к YouTube API.
+
+4. **Квоты YouTube API** - использование YouTube API подлежит ограничениям квот Google. При большом количестве запросов может потребоваться увеличение квоты.
+
+5. **Языковые особенности** - система пытается получить субтитры на языке оригинала, но не всегда это возможно. В некоторых случаях могут быть получены субтитры на другом языке.
+
+## Советы по использованию
+
+1. Всегда проверяйте успешность ответа (`success: true/false`), прежде чем использовать полученные данные.
+
+2. Для оптимизации производительности кэшируйте полученную лирику на стороне клиента, если это возможно.
+
+3. При разработке пользовательского интерфейса учитывайте, что текст песни может отсутствовать для некоторых треков.
+
+4. Для повышения точности синхронизации можно добавить небольшую задержку (например, 300-500 мс) к значениям startTime и endTime.
+
+5. Используйте плавные анимации при переключении между строками для улучшения пользовательского опыта. 

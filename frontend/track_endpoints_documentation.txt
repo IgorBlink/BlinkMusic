@@ -1,0 +1,586 @@
+# BlinkMusic API - Документация эндпоинтов для работы с треками
+
+## 1. Получение всех треков
+
+**Эндпоинт**: `GET /api/tracks`
+
+**Параметры запроса**:
+- `page` - номер страницы (по умолчанию: 1)
+- `limit` - количество треков на странице (по умолчанию: 10)
+- `sort` - порядок сортировки (по умолчанию: '-createdAt')
+
+**Пример запроса**:
+```
+GET /api/tracks?page=1&limit=20&sort=-playCount
+```
+
+**Успешный ответ (200 OK)**:
+```json
+{
+  "success": true,
+  "count": 20,
+  "totalPages": 5,
+  "currentPage": 1,
+  "data": [
+    {
+      "_id": "6123456789abcdef01234567",
+      "title": "Bohemian Rhapsody",
+      "artist": "Queen",
+      "album": "A Night at the Opera",
+      "duration": 354000,
+      "coverUrl": "https://example.com/cover.jpg",
+      "audioUrl": "https://example.com/audio.mp3",
+      "source": "lastfm",
+      "sourceId": "lastfm-bohemian-rhapsody-queen",
+      "license": "All Rights Reserved",
+      "genre": ["rock", "progressive rock"],
+      "tags": ["rock", "70s"],
+      "playCount": 1500,
+      "likeCount": 350,
+      "isPublic": true
+    },
+    // ...остальные треки
+  ]
+}
+```
+
+**Ответ с ошибкой (500 Internal Server Error)**:
+```json
+{
+  "success": false,
+  "message": "Не удалось получить список треков",
+  "error": "Текст ошибки"
+}
+```
+
+## 2. Получение трека по ID
+
+**Эндпоинт**: `GET /api/tracks/:id`
+
+**Параметры URL**:
+- `id` - идентификатор трека в MongoDB
+
+**Пример запроса**:
+```
+GET /api/tracks/6123456789abcdef01234567
+```
+
+**Успешный ответ (200 OK)**:
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "6123456789abcdef01234567",
+    "title": "Bohemian Rhapsody",
+    "artist": "Queen",
+    "album": "A Night at the Opera",
+    "duration": 354000,
+    "coverUrl": "https://example.com/cover.jpg",
+    "audioUrl": "https://example.com/audio.mp3",
+    "source": "lastfm",
+    "sourceId": "lastfm-bohemian-rhapsody-queen",
+    "license": "All Rights Reserved",
+    "genre": ["rock", "progressive rock"],
+    "tags": ["rock", "70s"],
+    "playCount": 1500,
+    "likeCount": 350,
+    "isPublic": true,
+    "enrichedData": {
+      "trackId": "12345",
+      "albumId": "6789",
+      "genre": "Rock",
+      "duration": "354000",
+      "description": "Bohemian Rhapsody is a song by the British rock band Queen...",
+      "mood": "Energetic",
+      "theme": "Epic"
+    }
+  }
+}
+```
+
+**Ответ с ошибкой (400 Bad Request)**:
+```json
+{
+  "success": false,
+  "message": "Неверный формат ID трека"
+}
+```
+
+**Ответ с ошибкой (404 Not Found)**:
+```json
+{
+  "success": false,
+  "message": "Трек не найден"
+}
+```
+
+**Ответ с ошибкой (500 Internal Server Error)**:
+```json
+{
+  "success": false,
+  "message": "Не удалось получить информацию о треке",
+  "error": "Текст ошибки"
+}
+```
+
+## 3. Поиск треков
+
+**Эндпоинт**: `GET /api/tracks/search`
+
+**Параметры запроса**:
+- `query` - поисковый запрос (обязательный)
+- `limit` - максимальное количество результатов (по умолчанию: 10)
+
+**Пример запроса**:
+```
+GET /api/tracks/search?query=Queen&limit=5
+```
+
+**Успешный ответ (200 OK)**:
+```json
+{
+  "success": true,
+  "count": 5,
+  "data": [
+    {
+      "_id": "6123456789abcdef01234567",
+      "title": "Bohemian Rhapsody",
+      "artist": "Queen",
+      "album": "A Night at the Opera",
+      "duration": 354000,
+      "coverUrl": "https://example.com/cover.jpg",
+      "audioUrl": "https://example.com/audio.mp3",
+      "source": "lastfm",
+      "sourceId": "lastfm-bohemian-rhapsody-queen",
+      "license": "All Rights Reserved",
+      "genre": ["rock", "progressive rock"],
+      "tags": ["rock", "70s"],
+      "playCount": 1500,
+      "likeCount": 350,
+      "isPublic": true
+    },
+    // ...остальные треки
+  ]
+}
+```
+
+**Ответ с ошибкой (400 Bad Request)**:
+```json
+{
+  "success": false,
+  "message": "Поисковый запрос обязателен"
+}
+```
+
+**Ответ с ошибкой (500 Internal Server Error)**:
+```json
+{
+  "success": false,
+  "message": "Не удалось выполнить поиск треков",
+  "error": "Текст ошибки"
+}
+```
+
+## 4. Получение рекомендованных треков
+
+**Эндпоинт**: `GET /api/tracks/recommended`
+
+**Параметры запроса**:
+- `limit` - максимальное количество результатов (по умолчанию: 10)
+
+**Пример запроса**:
+```
+GET /api/tracks/recommended?limit=4
+```
+
+**Успешный ответ (200 OK)**:
+```json
+{
+  "success": true,
+  "count": 4,
+  "data": [
+    {
+      "_id": "6123456789abcdef01234567",
+      "title": "Bohemian Rhapsody",
+      "artist": "Queen",
+      "album": "A Night at the Opera",
+      "duration": 354000,
+      "coverUrl": "https://example.com/cover.jpg",
+      "audioUrl": "https://example.com/audio.mp3",
+      "source": "lastfm",
+      "sourceId": "lastfm-bohemian-rhapsody-queen",
+      "license": "All Rights Reserved",
+      "genre": ["rock", "progressive rock"],
+      "tags": ["rock", "70s"],
+      "playCount": 1500,
+      "likeCount": 350,
+      "isPublic": true
+    },
+    // ...остальные рекомендованные треки
+  ]
+}
+```
+
+**Ответ с ошибкой (500 Internal Server Error)**:
+```json
+{
+  "success": false,
+  "message": "Не удалось получить рекомендованные треки",
+  "error": "Текст ошибки"
+}
+```
+
+## 5. Получение треков по жанру
+
+**Эндпоинт**: `GET /api/tracks/genre/:genre`
+
+**Параметры URL**:
+- `genre` - название жанра
+
+**Параметры запроса**:
+- `limit` - максимальное количество результатов (по умолчанию: 10)
+
+**Пример запроса**:
+```
+GET /api/tracks/genre/rock?limit=5
+```
+
+**Успешный ответ (200 OK)**:
+```json
+{
+  "success": true,
+  "count": 5,
+  "data": [
+    {
+      "_id": "6123456789abcdef01234567",
+      "title": "Bohemian Rhapsody",
+      "artist": "Queen",
+      "album": "A Night at the Opera",
+      "duration": 354000,
+      "coverUrl": "https://example.com/cover.jpg",
+      "audioUrl": "https://example.com/audio.mp3",
+      "source": "lastfm",
+      "sourceId": "lastfm-bohemian-rhapsody-queen",
+      "license": "All Rights Reserved",
+      "genre": ["rock", "progressive rock"],
+      "tags": ["rock", "70s"],
+      "playCount": 1500,
+      "likeCount": 350,
+      "isPublic": true
+    },
+    // ...остальные треки
+  ]
+}
+```
+
+**Ответ с ошибкой (400 Bad Request)**:
+```json
+{
+  "success": false,
+  "message": "Необходимо указать жанр"
+}
+```
+
+**Ответ с ошибкой (500 Internal Server Error)**:
+```json
+{
+  "success": false,
+  "message": "Не удалось получить треки по жанру",
+  "error": "Текст ошибки"
+}
+```
+
+## 6. Получение избранных треков
+
+**Эндпоинт**: `GET /api/tracks/favorites`
+
+**Заголовки**:
+- `Authorization: Bearer {token}` - JWT токен доступа (обязательный)
+
+**Пример запроса**:
+```
+GET /api/tracks/favorites
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+**Успешный ответ (200 OK)**:
+```json
+{
+  "success": true,
+  "count": 3,
+  "data": [
+    {
+      "_id": "6123456789abcdef01234567",
+      "title": "Bohemian Rhapsody",
+      "artist": "Queen",
+      "album": "A Night at the Opera",
+      "duration": 354000,
+      "coverUrl": "https://example.com/cover.jpg",
+      "audioUrl": "https://example.com/audio.mp3",
+      "source": "lastfm",
+      "sourceId": "lastfm-bohemian-rhapsody-queen",
+      "license": "All Rights Reserved",
+      "genre": ["rock", "progressive rock"],
+      "tags": ["rock", "70s"],
+      "playCount": 1500,
+      "likeCount": 350,
+      "isPublic": true
+    },
+    // ...остальные избранные треки
+  ]
+}
+```
+
+**Ответ с ошибкой (401 Unauthorized)**:
+```json
+{
+  "success": false,
+  "message": "Необходима аутентификация"
+}
+```
+
+**Ответ с ошибкой (404 Not Found)**:
+```json
+{
+  "success": false,
+  "message": "Пользователь не найден"
+}
+```
+
+**Ответ с ошибкой (500 Internal Server Error)**:
+```json
+{
+  "success": false,
+  "message": "Не удалось получить избранные треки",
+  "error": "Текст ошибки"
+}
+```
+
+## 7. Добавление трека в избранное
+
+**Эндпоинт**: `POST /api/tracks/:id/favorite`
+
+**Параметры URL**:
+- `id` - идентификатор трека
+
+**Заголовки**:
+- `Authorization: Bearer {token}` - JWT токен доступа (обязательный)
+
+**Пример запроса**:
+```
+POST /api/tracks/6123456789abcdef01234567/favorite
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+**Успешный ответ (200 OK)**:
+```json
+{
+  "success": true,
+  "message": "Трек добавлен в избранное",
+  "data": {
+    "_id": "6123456789abcdef01234567",
+    "title": "Bohemian Rhapsody",
+    "artist": "Queen",
+    "likeCount": 351,
+    // ...остальные поля трека
+  }
+}
+```
+
+**Ответ с ошибкой (400 Bad Request)**:
+```json
+{
+  "success": false,
+  "message": "Неверный формат ID трека"
+}
+```
+
+или 
+
+```json
+{
+  "success": false,
+  "message": "Трек уже добавлен в избранное"
+}
+```
+
+**Ответ с ошибкой (401 Unauthorized)**:
+```json
+{
+  "success": false,
+  "message": "Необходима аутентификация"
+}
+```
+
+**Ответ с ошибкой (404 Not Found)**:
+```json
+{
+  "success": false,
+  "message": "Трек не найден"
+}
+```
+
+или
+
+```json
+{
+  "success": false,
+  "message": "Пользователь не найден"
+}
+```
+
+**Ответ с ошибкой (500 Internal Server Error)**:
+```json
+{
+  "success": false,
+  "message": "Не удалось добавить трек в избранное",
+  "error": "Текст ошибки"
+}
+```
+
+## 8. Удаление трека из избранного
+
+**Эндпоинт**: `DELETE /api/tracks/:id/favorite`
+
+**Параметры URL**:
+- `id` - идентификатор трека
+
+**Заголовки**:
+- `Authorization: Bearer {token}` - JWT токен доступа (обязательный)
+
+**Пример запроса**:
+```
+DELETE /api/tracks/6123456789abcdef01234567/favorite
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+**Успешный ответ (200 OK)**:
+```json
+{
+  "success": true,
+  "message": "Трек удален из избранного",
+  "data": {
+    "_id": "6123456789abcdef01234567",
+    "title": "Bohemian Rhapsody",
+    "artist": "Queen",
+    "likeCount": 349,
+    // ...остальные поля трека
+  }
+}
+```
+
+**Ответ с ошибкой (400 Bad Request)**:
+```json
+{
+  "success": false,
+  "message": "Неверный формат ID трека"
+}
+```
+
+или 
+
+```json
+{
+  "success": false,
+  "message": "Трек не найден в избранном"
+}
+```
+
+**Ответ с ошибкой (401 Unauthorized)**:
+```json
+{
+  "success": false,
+  "message": "Необходима аутентификация"
+}
+```
+
+**Ответ с ошибкой (404 Not Found)**:
+```json
+{
+  "success": false,
+  "message": "Трек не найден"
+}
+```
+
+или
+
+```json
+{
+  "success": false,
+  "message": "Пользователь не найден"
+}
+```
+
+**Ответ с ошибкой (500 Internal Server Error)**:
+```json
+{
+  "success": false,
+  "message": "Не удалось удалить трек из избранного",
+  "error": "Текст ошибки"
+}
+```
+
+## Схема модели трека
+
+```typescript
+interface Track {
+  _id: string;                  // MongoDB ID трека
+  title: string;                // Название трека
+  artist: string;               // Исполнитель
+  album?: string;               // Альбом
+  duration: number;             // Длительность в миллисекундах
+  coverUrl?: string;            // URL обложки
+  audioUrl: string;             // URL аудиофайла
+  previewUrl?: string;          // URL для предварительного прослушивания
+  lyrics?: string;              // Текст песни
+  source: string;               // Источник трека (lastfm/audiodb/other)
+  sourceId: string;             // ID трека в источнике
+  license: string;              // Лицензия трека
+  genre?: string[];             // Массив жанров
+  tags?: string[];              // Массив тегов
+  playCount: number;            // Количество прослушиваний
+  likeCount: number;            // Количество лайков
+  isPublic: boolean;            // Публичный трек или нет
+  createdAt: Date;              // Дата создания записи
+  updatedAt: Date;              // Дата обновления записи
+}
+```
+
+## Обогащенные метаданные (AudioDB)
+
+```typescript
+interface EnrichedData {
+  trackId?: string;             // ID трека в AudioDB
+  albumId?: string;             // ID альбома в AudioDB
+  genre?: string;               // Жанр
+  duration?: string;            // Длительность
+  musicVideo?: string;          // URL музыкального видео
+  description?: string;         // Описание трека
+  mood?: string;                // Настроение трека
+  theme?: string;               // Тема трека
+  biography?: string;           // Биография исполнителя
+  thumb?: string;               // URL изображения исполнителя
+}
+```
+
+## Особенности работы API
+
+1. **Поиск треков**:
+   - Сначала выполняется поиск в локальной базе данных
+   - Если результатов недостаточно, дополнительно запрашиваются данные из Last.fm
+   - Треки из Last.fm обогащаются метаданными из AudioDB и сохраняются в локальную базу данных
+
+2. **Получение трека по ID**:
+   - Треки из базы данных дополнительно обогащаются свежими метаданными из AudioDB при каждом запросе
+
+3. **Поиск по жанру**:
+   - Аналогично общему поиску, сначала ищем локально, затем в Last.fm
+   - Треки из Last.fm автоматически получают запрашиваемый жанр
+   
+4. **Рекомендованные треки**:
+   - Сортируются по популярности (количеству лайков и прослушиваний)
+   - Если в базе недостаточно треков, дополняются популярными треками из Last.fm
+
+5. **Избранное**:
+   - Требует авторизации (JWT токен)
+   - При добавлении/удалении трека из избранного автоматически обновляется счетчик лайков трека 

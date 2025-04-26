@@ -1,0 +1,414 @@
+.youtube-test-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #fff;
+  background-color: #1a1a2e;
+  background: linear-gradient(135deg, #1a1a2e 0%, #0f1642 100%);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.youtube-test-page h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #00d4ff;
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+  position: relative;
+}
+
+.youtube-test-page h1::after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 3px;
+  background: linear-gradient(to right, transparent, #00d4ff, transparent);
+}
+
+.youtube-form {
+  margin-bottom: 2rem;
+  background-color: rgba(22, 33, 62, 0.6);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #00d4ff;
+  letter-spacing: 0.5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: rgba(15, 52, 96, 0.8);
+  color: white;
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.form-group input:focus {
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  background-color: rgba(15, 52, 96, 1);
+}
+
+/* Обновленная кнопка для формы */
+.play-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  background: linear-gradient(to right, #1e90ff, #4169e1);
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(30, 144, 255, 0.4);
+  letter-spacing: 0.5px;
+  margin-top: 0.5rem;
+}
+
+.play-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(30, 144, 255, 0.6);
+  background: linear-gradient(to right, #1e90ff, #5a7aeb);
+}
+
+.play-button:active {
+  transform: scale(0.98);
+  background: linear-gradient(to right, #1c87f1, #3f62d9);
+}
+
+.example-button {
+  width: 100%;
+  text-align: left;
+  background: linear-gradient(135deg, rgba(15, 52, 96, 0.7), rgba(22, 33, 62, 0.7));
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  border-radius: 8px;
+  box-shadow: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: white;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.example-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.example-button:hover {
+  background: linear-gradient(135deg, rgba(22, 33, 62, 0.8), rgba(15, 52, 96, 0.8));
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+  transform: translateY(-2px);
+  border-color: rgba(0, 212, 255, 0.5);
+}
+
+.example-button:hover::before {
+  left: 100%;
+}
+
+.example-button:active {
+  transform: translateY(0);
+  background: linear-gradient(135deg, rgba(15, 52, 96, 0.9), rgba(22, 33, 62, 0.9));
+}
+
+.youtube-player-controls {
+  margin-top: 2rem;
+  padding: 1.8rem;
+  background-color: rgba(22, 33, 62, 0.7);
+  backdrop-filter: blur(15px);
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.youtube-player-controls::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at top right, rgba(30, 144, 255, 0.15), transparent 70%);
+  pointer-events: none;
+}
+
+.youtube-player-controls h2 {
+  font-size: 1.75rem;
+  margin-bottom: 0.25rem;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.youtube-player-controls p {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  align-items: center;
+}
+
+/* Стили для группы кнопок управления плеером */
+.player-buttons {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+/* Навигационные кнопки (вперед/назад) */
+.navigation-button {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(30, 144, 255, 0.3);
+  color: white;
+  font-size: 0.9rem;
+  border: 2px solid rgba(30, 144, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba(30, 144, 255, 0.3);
+  position: relative;
+}
+
+.navigation-button::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 50%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+  border-radius: 50% 50% 0 0;
+  pointer-events: none;
+}
+
+.navigation-button:hover {
+  transform: scale(1.08);
+  background: rgba(30, 144, 255, 0.5);
+  box-shadow: 0 0 20px rgba(30, 144, 255, 0.5);
+}
+
+.navigation-button:active {
+  transform: scale(0.96);
+  background: rgba(30, 144, 255, 0.6);
+}
+
+/* Обновленная кнопка воспроизведения/паузы */
+.play-pause-button {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1e90ff, #4169e1);
+  color: white;
+  font-size: 1.2rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 25px rgba(30, 144, 255, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.play-pause-button::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 50%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+  border-radius: 50% 50% 0 0;
+  pointer-events: none;
+}
+
+.play-pause-button:hover {
+  transform: scale(1.08);
+  background: linear-gradient(135deg, #1e90ff, #5e7de9);
+  box-shadow: 0 0 30px rgba(30, 144, 255, 0.7);
+}
+
+.play-pause-button:active {
+  transform: scale(0.96);
+  background: linear-gradient(135deg, #1986e6, #3d63d7);
+}
+
+/* Обновленная кнопка отключения звука */
+.mute-button {
+  background-color: transparent;
+  border: 2px solid rgba(30, 144, 255, 0.7);
+  color: white;
+  border-radius: 24px;
+  padding: 8px 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mute-button:hover {
+  background-color: rgba(30, 144, 255, 0.2);
+  box-shadow: 0 0 15px rgba(30, 144, 255, 0.4);
+  border-color: rgba(30, 144, 255, 0.9);
+}
+
+.mute-button:active {
+  transform: translateY(1px);
+  background-color: rgba(30, 144, 255, 0.3);
+}
+
+.progress-container, .volume-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.progress-slider, .volume-slider {
+  flex: 1;
+  height: 6px;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-slider::before, .volume-slider::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--value, 0%);
+  height: 100%;
+  background: linear-gradient(to right, #1e90ff, #4169e1);
+  border-radius: 3px;
+  transition: width 0.1s ease;
+}
+
+.progress-slider::-webkit-slider-thumb, .volume-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(30, 144, 255, 0.8);
+  position: relative;
+  z-index: 2;
+  border: 3px solid #1e90ff;
+}
+
+.progress-time {
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  min-width: 46px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.test-examples {
+  margin-top: 2.5rem;
+  padding: 1.5rem;
+  background-color: rgba(22, 33, 62, 0.7);
+  backdrop-filter: blur(15px);
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.test-examples h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1.2rem;
+  color: #00d4ff;
+  position: relative;
+  padding-bottom: 0.6rem;
+}
+
+.test-examples h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(to right, #00d4ff, transparent);
+}
+
+.test-examples ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Стиль для активного трека в списке примеров */
+.example-button.active {
+  background: linear-gradient(135deg, rgba(30, 144, 255, 0.4), rgba(65, 105, 225, 0.4));
+  border-color: rgba(30, 144, 255, 0.8);
+  box-shadow: 0 0 20px rgba(30, 144, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.example-button.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: #1e90ff;
+  border-radius: 2px 0 0 2px;
+} 

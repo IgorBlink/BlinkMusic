@@ -1,0 +1,523 @@
+# РУКОВОДСТВО ПО РАБОТЕ С API BLINKMUSIC ДЛЯ ФРОНТЕНДА
+=====================================================
+
+## ОБЩАЯ ИНФОРМАЦИЯ
+
+Данное руководство описывает, как использовать API BlinkMusic для:
+- Поиска треков
+- Воспроизведения музыки
+- Работы с рекомендациями и случайными треками
+- Интеграции с плеерами
+
+ВАЖНО: API использует данные из Last.fm и обложки из iTunes, но в текущей версии не предоставляет прямые ссылки на аудиофайлы. Для воспроизведения необходимо использовать YouTube API.
+
+## СТРУКТУРА ТРЕКА В API
+
+Треки из API имеют следующую структуру:
+```json
+{
+  "title": "Название трека",
+  "artist": "Исполнитель",
+  "album": "Название альбома",
+  "coverUrl": "https://is1-ssl.mzstatic.com/image/thumb/...",
+  "source": "lastfm",
+  "sourceId": "трек-идентификатор",
+  "tags": ["rock", "alternative"],
+  "playCount": 0,
+  "likeCount": 0
+}
+```
+
+## 1. ПОИСК И ПОЛУЧЕНИЕ ТРЕКОВ
+
+### Поиск треков
+GET `/api/tracks/search?query=название_трека&limit=10`
+
+Пример запроса:
+```javascript
+fetch('http://localhost:5000/api/tracks/search?query=Rolling+Stones&limit=5')
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      // data.data содержит массив треков
+      displayTracks(data.data);
+    }
+  });
+```
+
+### Получение рекомендованных треков
+GET `/api/tracks/recommended?limit=10`
+
+Пример запроса:
+```javascript
+fetch('http://localhost:5000/api/tracks/recommended?limit=5')
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      // data.data содержит массив рекомендованных треков
+      displayRecommendedTracks(data.data);
+    }
+  });
+```
+
+### Получение треков по жанру
+GET `/api/tracks/genre/:genre?limit=10`
+
+Пример запроса:
+```javascript
+fetch('http://localhost:5000/api/tracks/genre/rock?limit=5')
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      // data.data содержит массив треков
+      displayGenreTracks(data.data);
+    }
+  });
+```
+
+## 2. ВОСПРОИЗВЕДЕНИЕ МУЗЫКИ ЧЕРЕЗ YOUTUBE API
+
+Так как API не предоставляет прямые ссылки на аудиофайлы, рекомендуется использовать YouTube API для воспроизведения.
+
+### Шаг 1: Интеграция YouTube API
+
+Добавьте в ваш проект YouTube API:
+```html
+<script src="https://www.youtube.com/iframe_api"></script>
+```
+
+### Шаг 2: Создание плеера
+
+```javascript
+let youtubePlayer;
+
+function onYouTubeIframeAPIReady() {
+  youtubePlayer = new YT.Player('youtube-player', {
+    height: '0',  // Можно сделать плеер невидимым
+    width: '0',   // Или задать нужные размеры для отображения видео
+    playerVars: {
+      'autoplay': 0,
+      'controls': 0
+    },
+    events: {
+      'onReady': onPlayerReady,
+      'onStateChange': onPlayerStateChange
+    }
+  });
+}
+
+function onPlayerReady(event) {
+  // Плеер готов к использованию
+}
+
+function onPlayerStateChange(event) {
+  // Обработка изменений состояния
+  if (event.data === YT.PlayerState.ENDED) {
+    // Трек закончился, можно перейти к следующему
+    playNextTrack();
+  }
+}
+```
+
+### Шаг 3: Функция для поиска и воспроизведения трека
+
+```javascript
+async function playTrack(artist, title) {
+  // Поиск видео на YouTube
+  const query = `${artist} - ${title} official audio`;
+  const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=1&key=YOUR_YOUTUBE_API_KEY`);
+  const data = await response.json();
+  
+  if (data.items && data.items.length > 0) {
+    const videoId = data.items[0].id.videoId;
+    youtubePlayer.loadVideoById(videoId);
+    
+    // Обновляем информацию о текущем треке на UI
+    updateCurrentTrackDisplay(artist, title);
+  } else {
+    console.error('Не удалось найти трек на YouTube');
+  }
+}
+```
+
+## 3. СОЗДАНИЕ ФУНКЦИИ "МОЙ ВАЙБ" (СЛУЧАЙНЫЙ ТРЕК)
+
+### Функция для воспроизведения случайного трека
+
+```javascript
+async function playRandomTrack() {
+  try {
+    // Получаем список рекомендованных треков
+    const response = await fetch('http://localhost:5000/api/tracks/recommended?limit=20');
+    const data = await response.json();
+    
+    if (data.success && data.data.length > 0) {
+      // Выбираем случайный трек из списка
+      const randomIndex = Math.floor(Math.random() * data.data.length);
+      const randomTrack = data.data[randomIndex];
+      
+      // Воспроизводим трек
+      playTrack(randomTrack.artist, randomTrack.title);
+      return randomTrack;
+    }
+  } catch (error) {
+    console.error('Ошибка при получении случайного трека:', error);
+  }
+  
+  return null;
+}
+```
+
+## 4. СОЗДАНИЕ ПЛЕЕРА С ПОЛНЫМ ФУНКЦИОНАЛОМ
+
+Вот пример более полной реализации плеера:
+
+```javascript
+class MusicPlayer {
+  constructor() {
+    this.currentTrack = null;
+    this.playlist = [];
+    this.currentIndex = 0;
+    this.isPlaying = false;
+    this.youtubePlayer = null;
+    
+    // Инициализация YouTube API
+    this.loadYouTubeAPI();
+  }
+  
+  loadYouTubeAPI() {
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    
+    window.onYouTubeIframeAPIReady = () => {
+      this.initYouTubePlayer();
+    };
+  }
+  
+  initYouTubePlayer() {
+    this.youtubePlayer = new YT.Player('youtube-player', {
+      height: '0',
+      width: '0',
+      playerVars: {
+        'autoplay': 0,
+        'controls': 0
+      },
+      events: {
+        'onReady': this.onPlayerReady.bind(this),
+        'onStateChange': this.onPlayerStateChange.bind(this)
+      }
+    });
+  }
+  
+  onPlayerReady(event) {
+    console.log('YouTube плеер готов к использованию');
+  }
+  
+  onPlayerStateChange(event) {
+    if (event.data === YT.PlayerState.ENDED) {
+      this.playNext();
+    }
+  }
+  
+  async searchTracks(query, limit = 10) {
+    try {
+      const response = await fetch(`http://localhost:5000/api/tracks/search?query=${encodeURIComponent(query)}&limit=${limit}`);
+      const data = await response.json();
+      return data.success ? data.data : [];
+    } catch (error) {
+      console.error('Ошибка при поиске треков:', error);
+      return [];
+    }
+  }
+  
+  async getRecommendedTracks(limit = 10) {
+    try {
+      const response = await fetch(`http://localhost:5000/api/tracks/recommended?limit=${limit}`);
+      const data = await response.json();
+      return data.success ? data.data : [];
+    } catch (error) {
+      console.error('Ошибка при получении рекомендаций:', error);
+      return [];
+    }
+  }
+  
+  async playTrack(track) {
+    if (!track || !track.artist || !track.title) return;
+    
+    this.currentTrack = track;
+    this.isPlaying = true;
+    
+    // Поиск видео на YouTube
+    const query = `${track.artist} - ${track.title} official audio`;
+    const apiKey = 'YOUR_YOUTUBE_API_KEY'; // Замените на ваш ключ
+    
+    try {
+      const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=1&key=${apiKey}`);
+      const data = await response.json();
+      
+      if (data.items && data.items.length > 0) {
+        const videoId = data.items[0].id.videoId;
+        this.youtubePlayer.loadVideoById(videoId);
+        
+        // Вызываем событие изменения трека
+        this.onTrackChange(track);
+      } else {
+        console.error('Не удалось найти трек на YouTube');
+      }
+    } catch (error) {
+      console.error('Ошибка при поиске видео на YouTube:', error);
+    }
+  }
+  
+  async playRandom() {
+    const tracks = await this.getRecommendedTracks(20);
+    if (tracks.length > 0) {
+      const randomIndex = Math.floor(Math.random() * tracks.length);
+      this.playTrack(tracks[randomIndex]);
+    }
+  }
+  
+  setPlaylist(tracks) {
+    this.playlist = tracks;
+    this.currentIndex = 0;
+  }
+  
+  playNext() {
+    if (this.playlist.length === 0) return;
+    
+    this.currentIndex = (this.currentIndex + 1) % this.playlist.length;
+    this.playTrack(this.playlist[this.currentIndex]);
+  }
+  
+  playPrevious() {
+    if (this.playlist.length === 0) return;
+    
+    this.currentIndex = (this.currentIndex - 1 + this.playlist.length) % this.playlist.length;
+    this.playTrack(this.playlist[this.currentIndex]);
+  }
+  
+  pause() {
+    if (this.youtubePlayer && this.isPlaying) {
+      this.youtubePlayer.pauseVideo();
+      this.isPlaying = false;
+    }
+  }
+  
+  resume() {
+    if (this.youtubePlayer && !this.isPlaying) {
+      this.youtubePlayer.playVideo();
+      this.isPlaying = true;
+    }
+  }
+  
+  onTrackChange(track) {
+    // Переопределите этот метод для обновления UI
+    console.log('Сейчас играет:', track.artist, '-', track.title);
+  }
+}
+```
+
+## 5. ИСПОЛЬЗОВАНИЕ ПЛЕЕРА В ПРИЛОЖЕНИИ
+
+```javascript
+// Создание экземпляра плеера
+const player = new MusicPlayer();
+
+// Обработчики событий UI
+document.getElementById('play-button').addEventListener('click', () => {
+  if (player.currentTrack) {
+    player.resume();
+  } else {
+    player.playRandom(); // "Мой вайб" - случайный трек
+  }
+});
+
+document.getElementById('pause-button').addEventListener('click', () => {
+  player.pause();
+});
+
+document.getElementById('next-button').addEventListener('click', () => {
+  player.playNext();
+});
+
+document.getElementById('prev-button').addEventListener('click', () => {
+  player.playPrevious();
+});
+
+// Поиск и создание плейлиста
+document.getElementById('search-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const query = document.getElementById('search-input').value;
+  
+  if (query) {
+    const tracks = await player.searchTracks(query);
+    
+    // Отображаем результаты поиска
+    const searchResults = document.getElementById('search-results');
+    searchResults.innerHTML = '';
+    
+    tracks.forEach((track, index) => {
+      const trackElement = document.createElement('div');
+      trackElement.classList.add('track-item');
+      trackElement.innerHTML = `
+        <img src="${track.coverUrl || 'default-cover.jpg'}" alt="${track.title}">
+        <div>
+          <h3>${track.title}</h3>
+          <p>${track.artist}</p>
+        </div>
+      `;
+      
+      trackElement.addEventListener('click', () => {
+        player.setPlaylist(tracks);
+        player.currentIndex = index;
+        player.playTrack(track);
+      });
+      
+      searchResults.appendChild(trackElement);
+    });
+  }
+});
+
+// Переопределяем метод обновления UI
+player.onTrackChange = (track) => {
+  document.getElementById('current-track-title').textContent = track.title;
+  document.getElementById('current-track-artist').textContent = track.artist;
+  document.getElementById('current-track-cover').src = track.coverUrl || 'default-cover.jpg';
+  
+  // Обновляем состояние кнопок
+  document.getElementById('play-button').style.display = 'none';
+  document.getElementById('pause-button').style.display = 'block';
+};
+```
+
+## 6. ДОПОЛНИТЕЛЬНЫЕ РЕКОМЕНДАЦИИ
+
+### Кэширование результатов поиска YouTube
+
+Для уменьшения количества API-запросов к YouTube рекомендуется кэшировать результаты:
+
+```javascript
+// Простой кэш для YouTube videoId
+const youtubeCache = {};
+
+async function getYouTubeVideoId(artist, title) {
+  const cacheKey = `${artist}-${title}`;
+  
+  // Проверяем кэш
+  if (youtubeCache[cacheKey]) {
+    return youtubeCache[cacheKey];
+  }
+  
+  // Выполняем запрос, если нет в кэше
+  const query = `${artist} - ${title} official audio`;
+  const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=1&key=YOUR_YOUTUBE_API_KEY`);
+  const data = await response.json();
+  
+  if (data.items && data.items.length > 0) {
+    const videoId = data.items[0].id.videoId;
+    // Сохраняем в кэш
+    youtubeCache[cacheKey] = videoId;
+    return videoId;
+  }
+  
+  return null;
+}
+```
+
+### Предзагрузка следующего трека
+
+Для более плавного перехода между треками можно предзагружать следующий трек:
+
+```javascript
+async function preloadNextTrack() {
+  if (player.playlist.length === 0) return;
+  
+  const nextIndex = (player.currentIndex + 1) % player.playlist.length;
+  const nextTrack = player.playlist[nextIndex];
+  
+  // Предзагружаем ID видео
+  await getYouTubeVideoId(nextTrack.artist, nextTrack.title);
+}
+```
+
+### Обработка ошибок
+
+Добавьте обработку ошибок для улучшения пользовательского опыта:
+
+```javascript
+async function playTrack(track) {
+  try {
+    // ...код воспроизведения...
+  } catch (error) {
+    console.error('Ошибка воспроизведения:', error);
+    showErrorMessage('Не удалось воспроизвести трек. Пробуем следующий...');
+    playNext(); // Автоматически переходим к следующему треку
+  }
+}
+```
+
+## 7. РАБОТА С ИЗБРАННЫМ
+
+Реализация добавления/удаления треков из избранного:
+
+```javascript
+async function addToFavorites(trackId) {
+  try {
+    const response = await fetch(`http://localhost:5000/api/tracks/${trackId}/favorite`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${getAuthToken()}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    const data = await response.json();
+    return data.success;
+  } catch (error) {
+    console.error('Ошибка при добавлении в избранное:', error);
+    return false;
+  }
+}
+
+async function removeFromFavorites(trackId) {
+  try {
+    const response = await fetch(`http://localhost:5000/api/tracks/${trackId}/favorite`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${getAuthToken()}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    const data = await response.json();
+    return data.success;
+  } catch (error) {
+    console.error('Ошибка при удалении из избранного:', error);
+    return false;
+  }
+}
+
+async function getFavorites() {
+  try {
+    const response = await fetch('http://localhost:5000/api/tracks/favorites', {
+      headers: {
+        'Authorization': `Bearer ${getAuthToken()}`
+      }
+    });
+    
+    const data = await response.json();
+    return data.success ? data.data : [];
+  } catch (error) {
+    console.error('Ошибка при получении избранного:', error);
+    return [];
+  }
+}
+```
+
+## ЗАКЛЮЧЕНИЕ
+
+В данном руководстве описаны основные методы API и способы их использования для создания музыкального плеера на фронтенде. Используя комбинацию Last.fm API для метаданных, iTunes API для обложек и YouTube API для воспроизведения, вы можете создать полнофункциональное музыкальное приложение.
+
+Для дополнительной информации обратитесь к документации API или свяжитесь с командой разработки. 

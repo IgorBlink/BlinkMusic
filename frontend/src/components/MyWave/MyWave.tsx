@@ -17,7 +17,8 @@ const MyWave = () => {
     isPlaying, 
     togglePlay,
     play, 
-    pause
+    pause,
+    loadRandomRecommendedTrack
   } = usePlayer();
   
   useEffect(() => {
@@ -99,8 +100,22 @@ const MyWave = () => {
     animationFrameRef.current = requestAnimationFrame(updateVisualizer);
   };
   
-  const handleTogglePlay = () => {
-    togglePlay();
+  const handleTogglePlay = async () => {
+    if (!currentTrack) {
+      // Если трека нет, загружаем случайный из рекомендованных
+      try {
+        const track = await loadRandomRecommendedTrack();
+        if (track) {
+          play();
+        }
+      } catch (error) {
+        console.error('Error loading random track:', error);
+        setAudioError('Не удалось загрузить трек');
+      }
+    } else {
+      // Если трек уже есть, переключаем воспроизведение
+      togglePlay();
+    }
   };
 
   const handleOpenCustomize = () => {

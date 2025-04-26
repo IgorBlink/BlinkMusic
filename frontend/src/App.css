@@ -5,12 +5,88 @@
   --background-color: #121212;
   --card-color: #282828;
   --hover-color: #6495ed;
+  
+  /* Глобальные CSS переменные для удаления фокуса */
+  --focus-outline-style: none !important;
+  --focus-box-shadow: none !important;
+  --webkit-focus-ring-color: transparent !important;
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+/* Полное удаление всех рамок фокуса и системных стилей для интерактивных элементов */
+button, 
+input, 
+a, 
+select, 
+textarea {
+  -webkit-tap-highlight-color: transparent;
+  outline: none !important;
+  border: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  box-shadow: none !important;
+}
+
+/* Удаляем все стили фокуса для всех элементов и всех браузеров */
+*:focus,
+*:focus-visible,
+*:focus-within,
+*:active,
+*:-moz-focusring {
+  outline: var(--focus-outline-style);
+  box-shadow: var(--focus-box-shadow);
+  -webkit-box-shadow: var(--focus-box-shadow);
+  -moz-box-shadow: var(--focus-box-shadow);
+}
+
+/* Удаление outline через CSS переменные */
+:focus {
+  outline-color: transparent;
+  outline-style: none;
+}
+
+/* Хак для удаления фокуса */
+* {
+  -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+}
+
+/* Блокировка встроенного фокуса Chrome */
+input, textarea, select, a, button {
+  -webkit-user-modify: read-write-plaintext-only;
+}
+
+/* Firefox специфичные стили */
+*::-moz-focus-inner {
+  border: 0 !important;
+  padding: 0 !important;
+}
+
+/* Webkit специфичные стили */
+*::-webkit-focus-inner {
+  border: 0 !important;
+}
+
+/* MS Edge специфичные стили */
+*::-ms-clear,
+*::-ms-reveal {
+  display: none !important;
+}
+
+/* Дополнительные стили для кнопок */
+button {
+  border-style: none;
+  outline-style: none;
+}
+
+/* Плавное изменение состояний для всех интерактивных элементов */
+button, a {
+  transition: all 0.2s ease;
 }
 
 body {
@@ -77,7 +153,7 @@ body {
 }
 
 /* Кнопки */
-button {
+/* button {
   background-color: var(--primary-color);
   color: white;
   border: none;
@@ -90,4 +166,4 @@ button {
 
 button:hover {
   background-color: var(--hover-color);
-}
+} */

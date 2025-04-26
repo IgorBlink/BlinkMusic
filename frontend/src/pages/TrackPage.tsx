@@ -6,63 +6,68 @@ import { BiInfoCircle } from 'react-icons/bi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { MdOutlineClose } from 'react-icons/md';
 import { usePlayer } from '../context/PlayerContext';
+import { tracksApi } from '../services/api';
+import api from '../api/axios';
+import { LyricLine } from '../types/music';
 import './TrackPage.css';
 
 const testPicture = '/test-picture.png';
 
-interface LyricLine {
-  text: string;
-  startTime: number;
-  endTime: number;
-  annotation?: string;
-}
+// Запрос для получения текста песни по YouTube URL
+const getLyricsFromYoutube = async (youtubeUrl: string): Promise<LyricLine[]> => {
+  try {
+    const response = await api.get(`/lyrics/youtube?url=${encodeURIComponent(youtubeUrl)}&timestamped=true`);
+    
+    if (response.data && response.data.success && Array.isArray(response.data.lyrics)) {
+      console.log('Текст песни успешно получен с YouTube');
+      return response.data.lyrics;
+    } else {
+      console.error('Неверный формат ответа от API:', response.data);
+      return [];
+    }
+  } catch (error) {
+    console.error('Ошибка при получении текста песни:', error);
+    return [];
+  }
+};
 
-const demoLyrics: LyricLine[] = [
-  { text: "Этой ночью чьё-то сердце от любви горит", startTime: 0, endTime: 15 },
-  { text: "Всё внутри (но мне это ни о чём не говорит), на счёт три", startTime: 15, endTime: 30 },
-  { text: "Забываем нас двоих", startTime: 30, endTime: 45 },
-  { text: "Где же слёзы мои? Где-то сердце горит", startTime: 45, endTime: 60 },
-  { text: "Этой ночью чьё-то сердце от любви горит", startTime: 60, endTime: 75 },
-  { text: "И эта ночь принадлежит нам двоим", startTime: 75, endTime: 90 },
-  { text: "Я отключаю телефон, закрываю дверь", startTime: 90, endTime: 105 },
-  { text: "Не нужно звонков и стука в окно", startTime: 105, endTime: 120 },
-  { text: "Ты отдаешься мне полностью теперь", startTime: 120, endTime: 135 },
-  { text: "И этот танец танцуем до утра", startTime: 135, endTime: 150 },
-  { text: "Где же слёзы мои? Где-то сердце горит", startTime: 150, endTime: 165 },
-  { text: "Этой ночью чьё-то сердце от любви горит", startTime: 165, endTime: 180 },
-];
-
-const getAnnotationFromAI = async (lyric: string): Promise<string> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const annotationExamples: {[key: string]: string} = {
-        "Этой ночью чьё-то сердце от любви горит": "Метафора сильных эмоциональных переживаний, связанных с любовью. Образ горящего сердца часто используется для описания страсти и сильных чувств.",
-        "Всё внутри (но мне это ни о чём не говорит), на счёт три": "Выражает внутренний конфликт между эмоциями и рациональным мышлением. Фраза 'на счёт три' означает решительное действие после короткого обратного отсчёта.",
-        "Забываем нас двоих": "Отражает желание отпустить прошлые отношения, стереть воспоминания о совместно проведенном времени.",
-        "Где же слёзы мои? Где-то сердце горит": "Риторический вопрос о неспособности выразить эмоции через слёзы, несмотря на внутреннюю боль ('горящее сердце').",
-        "И эта ночь принадлежит нам двоим": "Выражение исключительности момента, интимности между двумя людьми, когда весь мир сужается до их отношений.",
-        "Я отключаю телефон, закрываю дверь": "Символизирует отгораживание от внешнего мира, создание приватного пространства только для себя или для себя и партнёра.",
-        "Не нужно звонков и стука в окно": "Продолжение темы изоляции от внешних вмешательств, желание не допускать ничего, что может нарушить созданную атмосферу."
-      };
-      
-      const annotation = annotationExamples[lyric] || 
-        `Эта строка может интерпретироваться как ${lyric.length < 20 ? 'краткое выражение эмоций' : 'развернутая метафора чувств'}, передающая настроение меланхолии и романтической тоски.`;
-      
-      resolve(annotation);
-    }, 1500);
-  });
+const getAnnotationFromAI = async (trackId: string, lineId: string, lyric: string): Promise<string> => {
+  try {
+    // Пытаемся получить аннотацию с сервера
+    const annotation = await tracksApi.getAnnotation(trackId, lineId);
+    return annotation.content;
+  } catch (error) {
+    console.log('Не удалось получить аннотацию с сервера, используем временный демо-ответ');
+    
+    // Временный демо-фолбэк
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const annotationExamples: {[key: string]: string} = {
+          "Этой ночью чьё-то сердце от любви горит": "Метафора сильных эмоциональных переживаний, связанных с любовью. Образ горящего сердца часто используется для описания страсти и сильных чувств.",
+          "Всё внутри (но мне это ни о чём не говорит), на счёт три": "Выражает внутренний конфликт между эмоциями и рациональным мышлением. Фраза 'на счёт три' означает решительное действие после короткого обратного отсчёта.",
+        };
+        
+        const annotation = annotationExamples[lyric] || 
+          `Эта строка может интерпретироваться как ${lyric.length < 20 ? 'краткое выражение эмоций' : 'развернутая метафора чувств'}, передающая настроение меланхолии и романтической тоски.`;
+        
+        resolve(annotation);
+      }, 1500);
+    });
+  }
 };
 
 const TrackPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { currentTrack, isPlaying, togglePlay, progress, setProgress } = usePlayer();
-  const [lyrics, setLyrics] = useState<LyricLine[]>(demoLyrics);
+  const { currentTrack, isPlaying, togglePlay, progress, setProgress, loadTrackById } = usePlayer();
+  const [lyrics, setLyrics] = useState<LyricLine[]>([]);
   const [activeLyricIndex, setActiveLyricIndex] = useState<number>(0);
   const [loadingAnnotation, setLoadingAnnotation] = useState<number | null>(null);
   const [showAnnotation, setShowAnnotation] = useState<number | null>(null);
   const [isUserScrolling, setIsUserScrolling] = useState<boolean>(false);
   const [scrollTimeout, setScrollTimeout] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   
   const progressBarRef = useRef<HTMLDivElement>(null);
   const lyricsContainerRef = useRef<HTMLDivElement>(null);
@@ -71,13 +76,66 @@ const TrackPage = () => {
   const pageRef = useRef<HTMLDivElement>(null);
   const isAutoScrollEnabled = useRef<boolean>(true);
 
+  // Загрузка трека и его текста
   useEffect(() => {
-    console.log(`Загрузка текста песни для трека с ID: ${id}`);
-    lyricRefs.current = Array(lyrics.length).fill(null);
-  }, [id, lyrics.length]);
+    const fetchTrackData = async () => {
+      if (!id) return;
+      
+      setIsLoading(true);
+      setError(null);
+      
+      try {
+        // Загружаем трек через PlayerContext
+        const track = await loadTrackById(id);
+        
+        if (!track) {
+          setError('Трек не найден');
+          setIsLoading(false);
+          return;
+        }
+        
+        // Получаем текст песни из YouTube URL, если доступен
+        if (track.audioUrl && track.audioUrl.includes('youtube.com')) {
+          try {
+            const lyricsData = await getLyricsFromYoutube(track.audioUrl);
+            if (lyricsData && lyricsData.length > 0) {
+              setLyrics(lyricsData);
+            } else {
+              console.log('API вернул пустой текст песни');
+              setLyrics([]);
+            }
+          } catch (lyricsError) {
+            console.error('Ошибка при загрузке текста песни:', lyricsError);
+            setLyrics([]);
+          }
+        } else {
+          console.log('Трек не содержит ссылку на YouTube');
+          setLyrics([]);
+        }
+        
+      } catch (error) {
+        console.error('Ошибка при загрузке трека:', error);
+        setError('Не удалось загрузить трек. Пожалуйста, попробуйте позже.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchTrackData();
+    
+    return () => {
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+      }
+    };
+  }, [id, loadTrackById, scrollTimeout]);
 
   useEffect(() => {
-    if (!currentTrack || isUserScrolling) return;
+    lyricRefs.current = Array(lyrics.length).fill(null);
+  }, [lyrics.length]);
+
+  useEffect(() => {
+    if (!currentTrack || isUserScrolling || lyrics.length === 0) return;
 
     const newActiveIndex = lyrics.findIndex(
       line => progress >= line.startTime && progress < line.endTime
@@ -85,20 +143,30 @@ const TrackPage = () => {
 
     if (newActiveIndex !== -1 && newActiveIndex !== activeLyricIndex) {
       setActiveLyricIndex(newActiveIndex);
+      
+      if (isAutoScrollEnabled.current && !isUserScrolling) {
+        const activeElement = lyricRefs.current[newActiveIndex];
+        if (activeElement) {
+          activeElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+          });
+        }
+      }
+    }
+
+    if (newActiveIndex !== -1) {
+      const activeLine = lyrics[newActiveIndex];
+      const lineStart = activeLine.startTime;
+      const lineDuration = activeLine.endTime - activeLine.startTime;
+      const lineProgress = ((progress - lineStart) / lineDuration) * 100;
+      
+      const activeElement = lyricRefs.current[newActiveIndex];
+      if (activeElement) {
+        activeElement.style.setProperty('--line-progress', `${Math.min(100, Math.max(0, lineProgress))}%`);
+      }
     }
   }, [progress, lyrics, activeLyricIndex, currentTrack, isUserScrolling]);
-
-  useEffect(() => {
-    if (!lyricsContainerRef.current || isUserScrolling || !isAutoScrollEnabled.current) return;
-    
-    const activeElement = lyricRefs.current[activeLyricIndex];
-    if (activeElement) {
-      activeElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-      });
-    }
-  }, [activeLyricIndex, isUserScrolling]);
 
   const handleScroll = useCallback(() => {
     if (!lyricsContainerRef.current || !isAutoScrollEnabled.current) return;
@@ -161,7 +229,7 @@ const TrackPage = () => {
   };
 
   const handleLyricClick = (index: number) => {
-    if (!currentTrack) return;
+    if (!currentTrack || lyrics.length === 0) return;
     
     setIsUserScrolling(true);
     
@@ -171,6 +239,8 @@ const TrackPage = () => {
     
     const selectedElement = lyricRefs.current[index];
     if (selectedElement) {
+      selectedElement.style.setProperty('--line-progress', '0%');
+      
       selectedElement.scrollIntoView({
         behavior: 'smooth',
         block: 'center'
@@ -204,7 +274,7 @@ const TrackPage = () => {
       return;
     }
     
-    if (lyrics[index].annotation) {
+    if (lyrics[index].annotationId) {
       setShowAnnotation(index);
       return;
     }
@@ -213,12 +283,19 @@ const TrackPage = () => {
     setShowAnnotation(index);
     
     try {
-      const annotation = await getAnnotationFromAI(lyrics[index].text);
+      if (!id) throw new Error('ID трека не определен');
+      
+      const annotation = await getAnnotationFromAI(
+        id, 
+        lyrics[index].id, 
+        lyrics[index].text
+      );
       
       const updatedLyrics = [...lyrics];
       updatedLyrics[index] = {
         ...updatedLyrics[index],
-        annotation
+        annotationId: `temp-${index}`,
+        annotation: annotation
       };
       
       setLyrics(updatedLyrics);
@@ -251,6 +328,7 @@ const TrackPage = () => {
     
     if (index === activeLyricIndex) classes += ' active';
     if (index === activeLyricIndex + 1) classes += ' next-active';
+    if (index === activeLyricIndex - 1) classes += ' prev-active';
     if (showAnnotation === index) classes += ' has-annotation';
     
     return classes;
@@ -292,9 +370,13 @@ const TrackPage = () => {
         <div className="track-cover-container">
           <div className="track-cover-wrapper">
             <img 
-              src={testPicture} 
+              src={currentTrack.coverUrl || currentTrack.cover || testPicture} 
               alt={`${currentTrack.title} - ${currentTrack.artist}`} 
               className="track-page-cover"
+              onError={(e) => {
+                // Если не удалось загрузить изображение, используем запасное
+                (e.target as HTMLImageElement).src = testPicture;
+              }}
             />
             
           </div>
@@ -322,81 +404,92 @@ const TrackPage = () => {
           </div>
         </div>
 
-        <div className="lyrics-container" ref={lyricsContainerRef}>
-          {/* <div className="lyrics-header">
-            <h3>Текст песни</h3>
-            <div className="lyrics-controls">
-              <button 
-                className={`auto-scroll-toggle ${isAutoScrollEnabled.current ? 'active' : ''}`}
-                onClick={toggleAutoScroll}
-              >
-                {isAutoScrollEnabled.current ? 'Автоскролл: вкл' : 'Автоскролл: выкл'}
-              </button>
-              <div className="lyrics-info">
-                <span>Нажмите на <BiInfoCircle /> для получения аннотации к строке</span>
+        {isLoading ? (
+          <div className="loading-lyrics">
+            <div className="loading-spinner"></div>
+            <p>Загрузка текста песни...</p>
+          </div>
+        ) : lyrics.length === 0 ? (
+          <div className="no-lyrics-message">
+            <p>Текст песни не найден</p>
+          </div>
+        ) : (
+          <div className="lyrics-container" ref={lyricsContainerRef}>
+            <div className="lyrics-header">
+              <h3>Текст песни</h3>
+              <div className="lyrics-controls">
+                <button 
+                  className={`auto-scroll-toggle ${isAutoScrollEnabled.current ? 'active' : ''}`}
+                  onClick={toggleAutoScroll}
+                >
+                  {isAutoScrollEnabled.current ? 'Автоскролл: вкл' : 'Автоскролл: выкл'}
+                </button>
+                <div className="lyrics-info">
+                  <span>Нажмите на <BiInfoCircle /> для получения аннотации к строке</span>
+                </div>
               </div>
             </div>
-          </div> */}
-          
-          <div className="lyrics-content">
-            {lyrics.map((line, index) => (
-              <div 
-                key={index}
-                className={getLyricLineClass(index)}
-                onClick={() => handleLyricClick(index)}
-                ref={(el) => { lyricRefs.current[index] = el; }}
-              >
-                <div className="lyric-line-wrapper">
-                  <p className="lyrics-text">
-                    {line.text}
-                  </p>
-                  <button 
-                    className="annotation-button" 
-                    onClick={(e) => handleRequestAnnotation(index, e)}
-                    aria-label="Показать аннотацию"
-                  >
-                    {loadingAnnotation === index ? (
-                      <AiOutlineLoading3Quarters className="loading-icon" />
-                    ) : (
-                      <BiInfoCircle />
-                    )}
-                  </button>
-                </div>
-                
-                {showAnnotation === index && (
-                  <div className="lyric-annotation">
-                    <div className="annotation-header">
-                      <h4>Аннотация</h4>
-                      <button 
-                        className="close-annotation" 
-                        onClick={handleCloseAnnotation}
-                        aria-label="Закрыть аннотацию"
-                      >
-                        <MdOutlineClose />
-                      </button>
-                    </div>
-                    <div className="annotation-content">
-                      {lyrics[index].annotation ? (
-                        <p>{lyrics[index].annotation}</p>
+            
+            <div className="lyrics-content">
+              {lyrics.map((line, index) => (
+                <div 
+                  key={index}
+                  className={getLyricLineClass(index)}
+                  onClick={() => handleLyricClick(index)}
+                  ref={(el) => { lyricRefs.current[index] = el; }}
+                >
+                  <div className="lyric-line-wrapper">
+                    <p className="lyrics-text">
+                      {line.text}
+                    </p>
+                    <button 
+                      className="annotation-button" 
+                      onClick={(e) => handleRequestAnnotation(index, e)}
+                      aria-label="Показать аннотацию"
+                    >
+                      {loadingAnnotation === index ? (
+                        <AiOutlineLoading3Quarters className="loading-icon" />
                       ) : (
-                        <p className="loading-text">Получаем аннотацию...</p>
+                        <BiInfoCircle />
                       )}
-                    </div>
+                    </button>
                   </div>
-                )}
-              </div>
-            ))}
+                  
+                  {showAnnotation === index && (
+                    <div className="lyric-annotation">
+                      <div className="annotation-header">
+                        <h4>Аннотация</h4>
+                        <button 
+                          className="close-annotation" 
+                          onClick={handleCloseAnnotation}
+                          aria-label="Закрыть аннотацию"
+                        >
+                          <MdOutlineClose />
+                        </button>
+                      </div>
+                      <div className="annotation-content">
+                        {lyrics[index].annotation ? (
+                          <p>{lyrics[index].annotation}</p>
+                        ) : (
+                          <p className="loading-text">Получаем аннотацию...</p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            
+            <div 
+              className={`lyrics-scroll-indicator ${isUserScrolling ? 'visible' : ''}`}
+              style={{ 
+                height: lyricsContainerRef.current 
+                  ? `${Math.min(lyricsContainerRef.current.scrollTop / 10, 80)}%` 
+                  : '0%' 
+              }}
+            ></div>
           </div>
-          
-          <div 
-            className={`lyrics-scroll-indicator ${isUserScrolling ? 'visible' : ''}`}
-            style={{ 
-              height: lyricsContainerRef.current 
-                ? `${Math.min(lyricsContainerRef.current.scrollTop / 10, 80)}%` 
-                : '0%' 
-            }}
-          ></div>
-        </div>
+        )}
       </div>
     </div>
   );

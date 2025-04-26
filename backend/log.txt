@@ -1,0 +1,46 @@
+
+> blinkmusic-backend@1.0.0 dev
+> nodemon src/index.ts
+
+[33m[nodemon] 3.1.10[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): *.*[39m
+[33m[nodemon] watching extensions: ts,json[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+(node:30444) [MONGOOSE] Warning: Duplicate schema index on {"token":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[32minfo[39m: MongoDB Connected {"timestamp":"2025-04-26T15:51:41.078Z"}
+[32minfo[39m: Сервер запущен в режиме development на порту 5000 {"timestamp":"2025-04-26T15:51:41.082Z"}
+[32minfo[39m: Searching tracks with query: "Madonna", limit: 1 {"timestamp":"2025-04-26T15:51:45.252Z"}
+[32minfo[39m: Found 0 tracks in local database for query: "Madonna" {"timestamp":"2025-04-26T15:51:45.485Z"}
+[32minfo[39m: Searching Last.fm for 1 more tracks with query: "Madonna" {"timestamp":"2025-04-26T15:51:45.486Z"}
+[32minfo[39m: Searching Last.fm tracks with query: "Madonna", limit: 1 {"timestamp":"2025-04-26T15:51:45.486Z"}
+[32minfo[39m: Found 1 tracks in Last.fm for query: "Madonna" {"timestamp":"2025-04-26T15:51:46.116Z"}
+[32minfo[39m: Запрашиваем обложку из iTunes API для "Black Madonna" by "Cage the Elephant" {"timestamp":"2025-04-26T15:51:46.117Z"}
+[32minfo[39m: Получена обложка из iTunes API для "Black Madonna" by "Cage the Elephant" {"timestamp":"2025-04-26T15:51:46.813Z"}
+[32minfo[39m: Обогащаем метаданными трек "Black Madonna" от "Cage the Elephant" {"timestamp":"2025-04-26T15:51:47.300Z"}
+[32minfo[39m: Трек "Black Madonna" уже обогащен метаданными {"timestamp":"2025-04-26T15:51:47.302Z"}
+[0mGET /api/tracks/search?query=Madonna&limit=1 [32m200[0m 2053.282 ms - 640[0m
+[32minfo[39m: Searching tracks with query: "Madonna", limit: 1 {"timestamp":"2025-04-26T15:52:02.499Z"}
+[32minfo[39m: Found 1 tracks in local database for query: "Madonna" {"timestamp":"2025-04-26T15:52:02.724Z"}
+[0mGET /api/tracks/search?query=Madonna&limit=1 [32m200[0m 226.491 ms - 640[0m
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+(node:30532) [MONGOOSE] Warning: Duplicate schema index on {"token":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[32minfo[39m: MongoDB Connected {"timestamp":"2025-04-26T15:52:07.024Z"}
+[32minfo[39m: Сервер запущен в режиме development на порту 5000 {"timestamp":"2025-04-26T15:52:07.033Z"}
+[32minfo[39m: Searching tracks with query: "Coldplay", limit: 1 {"timestamp":"2025-04-26T15:52:17.645Z"}
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+(node:30597) [MONGOOSE] Warning: Duplicate schema index on {"token":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[32minfo[39m: MongoDB Connected {"timestamp":"2025-04-26T15:52:21.851Z"}
+[32minfo[39m: Сервер запущен в режиме development на порту 5000 {"timestamp":"2025-04-26T15:52:21.857Z"}
+[32m[nodemon] restarting due to changes...[39m
+[32minfo[39m: Getting 1 recommended tracks {"timestamp":"2025-04-26T15:52:31.319Z"}
+[32m[nodemon] starting `ts-node src/index.ts`[39m
+(node:30658) [MONGOOSE] Warning: Duplicate schema index on {"token":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[32minfo[39m: MongoDB Connected {"timestamp":"2025-04-26T15:52:35.716Z"}
+[32minfo[39m: Сервер запущен в режиме development на порту 5000 {"timestamp":"2025-04-26T15:52:35.722Z"}
