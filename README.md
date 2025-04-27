@@ -11,6 +11,9 @@
 <div align="center">
   <sub>Созвездие музыки и технологий | The constellation of music and technology</sub>
 </div>
+<div align="center">
+  <sub>тест стенд доступен по ссылке http://150.241.95.14/ (домен мне снесли пока что так)</sub>
+</div>
 
 <br />
 
