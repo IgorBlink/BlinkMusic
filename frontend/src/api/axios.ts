@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Базовый URL API
-export const API_URL = 'http://localhost:5000/api';
+export const API_URL = 'http://150.241.95.14/api';
 
 // Основной экземпляр axios для обычных запросов
 const api = axios.create({

@@ -27,7 +27,7 @@ const getLyricsFromYoutube = async (youtubeUrl: string): Promise<LyricLine[]> =>
   try {
     console.log('Запрос текста песни для URL:', youtubeUrl);
     const response = await axios.get(
-      `http://localhost:5000/api/lyrics/youtube?url=${encodeURIComponent(youtubeUrl)}&timestamped=true`
+      `http://150.241.95.14/api/lyrics/youtube?url=${encodeURIComponent(youtubeUrl)}&timestamped=true`
     );
     
     if (response.data && response.data.success && Array.isArray(response.data.lyrics)) {
@@ -258,7 +258,7 @@ const TrackPage = () => {
       if (!currentTrack) return;
       
       // Прямой запрос к API для получения аннотации
-      const response = await axios.post('http://localhost:5000/api/annotations/explain', {
+        const response = await axios.post('http://150.241.95.14/api/annotations/explain', {
         lyricLine: text,
         artist: currentTrack.artist,
         trackTitle: currentTrack.title
