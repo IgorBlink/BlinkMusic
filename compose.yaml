@@ -27,7 +27,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - VITE_API_URL=http://backend:5000/api
+      - VITE_API_URL=http://150.241.95.14/api
       - NODE_ENV=production
     volumes:
       - ./frontend:/app
