@@ -4,7 +4,7 @@ import { getAccessToken, setAccessToken, clearAuthData } from '../utils/auth';
 
 // Базовый URL API - используем window.env для получения переменных окружения в браузере
 // или устанавливаем значение по умолчанию
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'http://150.241.95.14/api';
 
 // Создаем экземпляр axios с базовым URL
 const api = axios.create({
