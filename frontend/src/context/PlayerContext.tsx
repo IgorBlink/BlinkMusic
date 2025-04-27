@@ -1,5 +1,4 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect, useRef } from 'react';
-import { Track as MusicApiTrack } from '../types/music';
 import { tracksApi } from '../services/api';
 import YouTubePlayer, { YouTubePlayerRef } from '../components/YouTubePlayer';
 
@@ -53,7 +52,7 @@ const testTrack: Track = {
 
 const DEMO_AUDIO_URL = 'https://assets.mixkit.co/sfx/preview/mixkit-tech-house-vibes-130.mp3';
 
-const YOUTUBE_EMBED_PREFIX = 'https://www.youtube.com/embed/';
+
 
 export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);

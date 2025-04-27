@@ -21,7 +21,7 @@ const MyWavePage: React.FC = () => {
     setWaveSettings(settings);
     setShowModal(false);
     console.log('Сохранены настройки:', settings);
- 
+  };
 
 
   const renderSelectedSettings = () => {

@@ -144,8 +144,8 @@ const LandingPage = () => {
       {/* Шапка лендинга */}
       <header className="landing-header">
         <div className="landing-logo">
-          <img src="/logo.svg" alt="BlinkMusic Logo" />
-          <span>BlinkMusic</span>
+          <img src="/logo.png" alt="BlinkMusic Logo" />
+          
         </div>
         <nav className="landing-nav">
           <ul>

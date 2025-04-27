@@ -17,7 +17,7 @@ const AuthPage = () => {
   
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, register, error: authError, isAuthenticated } = useAuth();
+  const { login, register,  isAuthenticated } = useAuth();
   
   // Определяем, куда перенаправить пользователя после авторизации
   const from = (location.state as any)?.from?.pathname || '/';

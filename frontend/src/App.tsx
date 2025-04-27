@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import AlbumsPage from './pages/AlbumsPage'
 import TrackPage from './pages/TrackPage'
@@ -30,6 +30,7 @@ function App() {
             <Route path="/register" element={<AuthPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/welcome" element={<LandingPage />} />
+            <Route path="/landing" element={<LandingPage />} />
             
             
             {/* Защищенные маршруты (требуют авторизации) */}

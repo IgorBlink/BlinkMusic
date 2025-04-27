@@ -3,7 +3,6 @@ import { FiChevronRight } from 'react-icons/fi';
 import { FiRefreshCw } from 'react-icons/fi';
 import MusicCard from './MusicCard';
 import { tracksApi } from '../../services/api';
-import { Track } from '../../types/music';
 import './ForYouSection.css';
 
 // Функция проверки доступности API
@@ -24,7 +23,6 @@ const ForYouSection = () => {
   const [recommendedTracks, setRecommendedTracks] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [apiAvailable, setApiAvailable] = useState(true);
   
   useEffect(() => {
     fetchRecommendedTracks();
@@ -36,7 +34,6 @@ const ForYouSection = () => {
     
     // Проверка доступности API
     const isApiAvailable = await checkApiAvailability();
-    setApiAvailable(isApiAvailable);
     
     if (!isApiAvailable) {
       // Если API недоступен, имитируем задержку и показываем ошибку

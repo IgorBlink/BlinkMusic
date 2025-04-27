@@ -1,20 +1,17 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef} from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaPlay, FaPause } from 'react-icons/fa';
 import { IoMdArrowBack } from 'react-icons/io';
 import { BiInfoCircle } from 'react-icons/bi';
-import { MdOutlineClose } from 'react-icons/md';
+
 import { usePlayer } from '../context/PlayerContext';
-import { tracksApi } from '../services/api';
+
 import { LyricLine } from '../types/music';
 import axios from 'axios';
 import './TrackPage.css';
 
 // Кэш для хранения текстов песен по URL, чтобы избежать повторных запросов
 const lyricsCache: Record<string, LyricLine[]> = {};
-
-// Кэш для хранения аннотаций к строкам
-const annotationsCache: Record<string, string> = {};
 
 // Константа для опережения активации строки (в секундах)
 const LYRIC_ADVANCE_TIME = 1;
@@ -58,34 +55,34 @@ const getLyricsFromYoutube = async (youtubeUrl: string): Promise<LyricLine[]> =>
 };
 
 // Упрощенная функция получения аннотации
-const getAnnotation = async (
-  lyricLine: string,
-  artist: string,
-  trackTitle: string
-): Promise<string> => {
-  try {
-    console.log('Отправка запроса на получение аннотации:', { lyricLine, artist, trackTitle });
+// const getAnnotation = async (
+//   lyricLine: string,
+//   artist: string,
+//   trackTitle: string
+// ): Promise<string> => {
+//   try {
+//     console.log('Отправка запроса на получение аннотации:', { lyricLine, artist, trackTitle });
     
-    // Отправляем запрос на сервер
-    const response = await axios.post('http://localhost:5000/api/annotations/explain', {
-      lyricLine,
-      artist,
-      trackTitle
-    });
+//     // Отправляем запрос на сервер
+//     const response = await axios.post('http://localhost:5000/api/annotations/explain', {
+//       lyricLine,
+//       artist,
+//       trackTitle
+//     });
     
-    console.log('Получен ответ от сервера:', response.data);
+//     console.log('Получен ответ от сервера:', response.data);
     
-    // Просто возвращаем текст аннотации, заменяя переносы строк
-    if (response.data?.success && response.data?.annotation?.text) {
-      return response.data.annotation.text.replace(/\n/g, '<br>');
-    }
+//     // Просто возвращаем текст аннотации, заменяя переносы строк
+//     if (response.data?.success && response.data?.annotation?.text) {
+//       return response.data.annotation.text.replace(/\n/g, '<br>');
+//     }
     
-    return 'Не удалось получить аннотацию для этой строки.';
-  } catch (error) {
-    console.error('Ошибка при получении аннотации:', error);
-    return 'Произошла ошибка при запросе аннотации.';
-  }
-};
+//     return 'Не удалось получить аннотацию для этой строки.';
+//   } catch (error) {
+//     console.error('Ошибка при получении аннотации:', error);
+//     return 'Произошла ошибка при запросе аннотации.';
+//   }
+// };
 
 // Плейсхолдер для лирики, если API недоступно
 const getPlaceholderLyrics = (): LyricLine[] => {
@@ -246,9 +243,9 @@ const TrackPage = () => {
   };
 
   // Переключение режима автопрокрутки
-  const toggleAutoScroll = () => {
-    setIsAutoScroll(!isAutoScroll);
-  };
+  // const toggleAutoScroll = () => {
+  //   setIsAutoScroll(!isAutoScroll);
+  // };
 
   // Обработчик для кнопки аннотации - суперпростая реализация
   const handleRequestAnnotation = async (text: string, index: number) => {
@@ -429,6 +426,10 @@ const TrackPage = () => {
             <div className="loading-spinner"></div>
             <p>Загрузка текста песни...</p>
           </div>
+        ) : error ? (
+          <div className="no-lyrics-message">
+            <p>{error}</p>
+          </div>
         ) : lyrics.length === 0 ? (
           <div className="no-lyrics-message">
             <p>Текст песни не найден</p>
@@ -464,7 +465,7 @@ const TrackPage = () => {
                     </p>
                     <button 
                       className="annotation-button" 
-                      onClick={(e) => handleRequestAnnotation(line.text, index)}
+                      onClick={() => handleRequestAnnotation(line.text, index)}
                       aria-label="Показать аннотацию"
                     >
                       <BiInfoCircle />

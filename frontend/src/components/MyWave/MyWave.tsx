@@ -17,7 +17,7 @@ const MyWave = () => {
     isPlaying, 
     togglePlay,
     play, 
-    pause,
+    
     loadRandomRecommendedTrack
   } = usePlayer();
   

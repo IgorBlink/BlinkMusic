@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Фон приложения с более глубоким космическим градиентом -->
+  <rect width="800" height="600" rx="20" fill="url(#cosmicDeepGradient)"/>
+  
+  <!-- Блики и звезды для космического фона -->
+  <circle cx="400" cy="300" r="280" fill="url(#glowRadial)" opacity="0.3"/>
+  <circle cx="600" cy="150" r="100" fill="url(#blueGlow)" opacity="0.2"/>
+  <circle cx="200" cy="450" r="120" fill="url(#purpleGlow)" opacity="0.15"/>
+  
+  <!-- Звездное небо с мерцающими звездами -->
+  <g id="stars">
+    <circle cx="130" cy="85" r="1" fill="white" opacity="0.7">
+      <animate attributeName="opacity" values="0.7;0.9;0.7" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="210" cy="150" r="1.5" fill="white" opacity="0.8">
+      <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="300" cy="90" r="1" fill="white" opacity="0.6">
+      <animate attributeName="opacity" values="0.6;0.9;0.6" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="450" cy="70" r="1.2" fill="white" opacity="0.8">
+      <animate attributeName="opacity" values="0.8;0.4;0.8" dur="3.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="550" cy="110" r="1" fill="white" opacity="0.7">
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="2.8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="650" cy="180" r="1.3" fill="white" opacity="0.6">
+      <animate attributeName="opacity" values="0.6;0.8;0.6" dur="3.2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="700" cy="250" r="1" fill="white" opacity="0.7">
+      <animate attributeName="opacity" values="0.7;0.2;0.7" dur="3.7s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="720" cy="350" r="1.2" fill="white" opacity="0.6">
+      <animate attributeName="opacity" values="0.6;0.9;0.6" dur="2.9s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="670" cy="450" r="1" fill="white" opacity="0.8">
+      <animate attributeName="opacity" values="0.8;0.3;0.8" dur="3.3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="550" cy="500" r="1.4" fill="white" opacity="0.7">
+      <animate attributeName="opacity" values="0.7;1;0.7" dur="2.7s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="420" cy="530" r="1" fill="white" opacity="0.6">
+      <animate attributeName="opacity" values="0.6;0.8;0.6" dur="3.8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="300" cy="510" r="1.3" fill="white" opacity="0.7">
+      <animate attributeName="opacity" values="0.7;0.4;0.7" dur="3.1s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="180" cy="530" r="1" fill="white" opacity="0.8">
+      <animate attributeName="opacity" values="0.8;0.5;0.8" dur="3.4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="100" cy="450" r="1.2" fill="white" opacity="0.6">
+      <animate attributeName="opacity" values="0.6;0.9;0.6" dur="2.6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="80" cy="350" r="1" fill="white" opacity="0.7">
+      <animate attributeName="opacity" values="0.7;0.3;0.7" dur="3.9s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="60" cy="250" r="1.5" fill="white" opacity="0.8">
+      <animate attributeName="opacity" values="0.8;0.4;0.8" dur="3s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Небольшие анимированные метеоры -->
+  <g id="meteors">
+    <line x1="700" y1="50" x2="650" y2="100" stroke="white" stroke-width="1" opacity="0">
+      <animate attributeName="opacity" values="0;0.8;0" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+    </line>
+    <line x1="300" y1="30" x2="250" y2="80" stroke="white" stroke-width="1" opacity="0">
+      <animate attributeName="opacity" values="0;0.8;0" dur="1.7s" begin="1.2s" repeatCount="indefinite"/>
+    </line>
+    <line x1="550" y1="500" x2="500" y2="550" stroke="white" stroke-width="1" opacity="0">
+      <animate attributeName="opacity" values="0;0.8;0" dur="2.3s" begin="0.8s" repeatCount="indefinite"/>
+    </line>
+  </g>
+  
+  <!-- Сайдбар с анимированной подсветкой -->
+  <rect x="50" y="60" width="200" height="480" rx="15" fill="#0A0D20"/>
+  <rect x="50" y="60" width="200" height="480" rx="15" stroke="url(#sidebarGlow)" stroke-width="1" opacity="0.5">
+    <animate attributeName="opacity" values="0.3;0.6;0.3" dur="4s" repeatCount="indefinite"/>
+  </rect>
+  
+  <!-- Логотип с анимацией пульсации -->
+  <circle cx="90" cy="100" r="25" fill="url(#logoGradient)">
+    <animate attributeName="r" values="25;27;25" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <text x="130" y="108" font-family="Arial" font-weight="bold" font-size="20" fill="white">BlinkMusic</text>
+  
+  <!-- Меню с ховер-эффектом -->
+  <rect x="70" y="150" width="160" height="40" rx="8" fill="#1E3A8A" opacity="0.6"/>
+  <circle cx="90" cy="170" r="8" fill="#4169E1"/>
+  <text x="110" y="178" font-family="Arial" font-size="16" fill="white">Главная</text>
+  
+  <circle cx="90" cy="220" r="8" fill="white" opacity="0.6"/>
+  <text x="110" y="228" font-family="Arial" font-size="16" fill="white" opacity="0.8">Поиск</text>
+  
+  <circle cx="90" cy="270" r="8" fill="white" opacity="0.6"/>
+  <text x="110" y="278" font-family="Arial" font-size="16" fill="white" opacity="0.8">Библиотека</text>
+  
+  <circle cx="90" cy="320" r="8" fill="white" opacity="0.6"/>
+  <text x="110" y="328" font-family="Arial" font-size="16" fill="white" opacity="0.8">Плейлисты</text>
+  
+  <!-- Главный контент с интерактивными элементами -->
+  <rect x="280" y="60" width="470" height="200" rx="15" fill="#1A2A42"/>
+  <rect x="280" y="60" width="470" height="200" rx="15" stroke="url(#contentGlow)" stroke-width="1.5" opacity="0.7">
+    <animate attributeName="opacity" values="0.7;0.3;0.7" dur="5s" repeatCount="indefinite"/>
+  </rect>
+  
+  <!-- Заголовок и космическая кнопка -->
+  <text x="300" y="100" font-family="Arial" font-weight="bold" font-size="24" fill="white">Моя космическая волна</text>
+  
+  <g id="cosmic-button">
+    <circle cx="515" cy="160" r="50" fill="url(#cosmicButtonGradient)" stroke="#4169E1" stroke-width="2">
+      <animate attributeName="r" values="50;53;50" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <path d="M505 160L535 160" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+    <path d="M520 145L520 175" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="515" cy="160" r="65" fill="none" stroke="url(#pulseGradient)" stroke-width="2" opacity="0.5">
+      <animate attributeName="r" values="55;70;55" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;0.1;0.5" dur="3s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Интерактивная волновая визуализация -->
+  <g id="wave-visualization">
+    <path d="M350 180 Q 380 150, 410 170 Q 440 190, 470 160 Q 500 130, 530 150 Q 560 170, 590 140 Q 620 110, 650 140" stroke="url(#waveGradient1)" stroke-width="3" fill="none">
+      <animate attributeName="d" 
+               values="M350 180 Q 380 150, 410 170 Q 440 190, 470 160 Q 500 130, 530 150 Q 560 170, 590 140 Q 620 110, 650 140;
+                       M350 170 Q 380 200, 410 180 Q 440 160, 470 170 Q 500 180, 530 170 Q 560 150, 590 160 Q 620 170, 650 150;
+                       M350 180 Q 380 150, 410 170 Q 440 190, 470 160 Q 500 130, 530 150 Q 560 170, 590 140 Q 620 110, 650 140" 
+               dur="10s" 
+               repeatCount="indefinite"/>
+    </path>
+    <path d="M350 200 Q 380 220, 410 190 Q 440 160, 470 180 Q 500 200, 530 180 Q 560 160, 590 190 Q 620 220, 650 200" stroke="url(#waveGradient2)" stroke-width="2" fill="none">
+      <animate attributeName="d" 
+               values="M350 200 Q 380 220, 410 190 Q 440 160, 470 180 Q 500 200, 530 180 Q 560 160, 590 190 Q 620 220, 650 200;
+                       M350 190 Q 380 160, 410 180 Q 440 210, 470 190 Q 500 170, 530 190 Q 560 210, 590 180 Q 620 170, 650 190;
+                       M350 200 Q 380 220, 410 190 Q 440 160, 470 180 Q 500 200, 530 180 Q 560 160, 590 190 Q 620 220, 650 200" 
+               dur="8s" 
+               repeatCount="indefinite"/>
+    </path>
+    <path d="M350 160 Q 380 180, 410 160 Q 440 140, 470 160 Q 500 180, 530 160 Q 560 140, 590 160 Q 620 180, 650 160" stroke="url(#waveGradient3)" stroke-width="1.5" fill="none" opacity="0.7">
+      <animate attributeName="d" 
+               values="M350 160 Q 380 180, 410 160 Q 440 140, 470 160 Q 500 180, 530 160 Q 560 140, 590 160 Q 620 180, 650 160;
+                       M350 150 Q 380 130, 410 150 Q 440 170, 470 150 Q 500 130, 530 150 Q 560 170, 590 150 Q 620 130, 650 150;
+                       M350 160 Q 380 180, 410 160 Q 440 140, 470 160 Q 500 180, 530 160 Q 560 140, 590 160 Q 620 180, 650 160" 
+               dur="12s" 
+               repeatCount="indefinite"/>
+    </path>
+  </g>
+  
+  <!-- Секция треков с интерактивным эффектом -->
+  <rect x="280" y="280" width="220" height="260" rx="15" fill="#1A2A42"/>
+  <rect x="280" y="280" width="220" height="260" rx="15" stroke="url(#tracksSectionGlow)" stroke-width="1" opacity="0.6">
+    <animate attributeName="opacity" values="0.6;0.3;0.6" dur="6s" repeatCount="indefinite"/>
+  </rect>
+  <text x="300" y="320" font-family="Arial" font-weight="bold" font-size="20" fill="white">Популярное</text>
+  
+  <!-- Трек 1 с анимацией hover -->
+  <g id="track-1">
+    <rect x="300" y="340" width="180" height="60" rx="8" fill="#0A0D20"/>
+    <rect x="300" y="340" width="60" height="60" rx="8" fill="url(#albumCover1)"/>
+    <text x="370" y="365" font-family="Arial" font-size="14" fill="white">Cosmic Drift</text>
+    <text x="370" y="385" font-family="Arial" font-size="12" fill="#AAAAAA">Astral Echoes</text>
+    <rect x="300" y="340" width="180" height="60" rx="8" stroke="url(#trackHoverGlow)" stroke-width="1.5" opacity="0">
+      <animate attributeName="opacity" values="0;0.7;0" dur="5s" begin="2s" repeatCount="indefinite"/>
+    </rect>
+    <circle cx="450" cy="370" r="12" fill="#0A0D20" stroke="#4169E1" stroke-width="1">
+      <animate attributeName="opacity" values="0;1;0" dur="5s" begin="2s" repeatCount="indefinite"/>
+    </circle>
+    <path d="M446 370L456 370" stroke="#4169E1" stroke-width="1.5" stroke-linecap="round">
+      <animate attributeName="opacity" values="0;1;0" dur="5s" begin="2s" repeatCount="indefinite"/>
+    </path>
+  </g>
+  
+  <!-- Трек 2 -->
+  <rect x="300" y="410" width="180" height="60" rx="8" fill="#0A0D20"/>
+  <rect x="300" y="410" width="60" height="60" rx="8" fill="url(#albumCover2)"/>
+  <text x="370" y="435" font-family="Arial" font-size="14" fill="white">Lunar Waves</text>
+  <text x="370" y="455" font-family="Arial" font-size="12" fill="#AAAAAA">Night Vision</text>
+  
+  <!-- Трек 3 -->
+  <rect x="300" y="480" width="180" height="60" rx="8" fill="#0A0D20"/>
+  <rect x="300" y="480" width="60" height="60" rx="8" fill="url(#albumCover3)"/>
+  <text x="370" y="505" font-family="Arial" font-size="14" fill="white">Stellar Dreams</text>
+  <text x="370" y="525" font-family="Arial" font-size="12" fill="#AAAAAA">Galaxy Pulse</text>
+  
+  <!-- Секция альбомов с интерактивным эффектом -->
+  <rect x="520" y="280" width="230" height="260" rx="15" fill="#1A2A42"/>
+  <rect x="520" y="280" width="230" height="260" rx="15" stroke="url(#albumsSectionGlow)" stroke-width="1" opacity="0.6">
+    <animate attributeName="opacity" values="0.6;0.3;0.6" dur="7s" repeatCount="indefinite"/>
+  </rect>
+  <text x="540" y="320" font-family="Arial" font-weight="bold" font-size="20" fill="white">Альбомы</text>
+  
+  <!-- Сетка альбомов с анимацией hover -->
+  <g id="album-grid">
+    <rect x="540" y="340" width="80" height="80" rx="8" fill="url(#albumCover4)"/>
+    <rect x="540" y="340" width="80" height="80" rx="8" stroke="url(#albumHoverGlow)" stroke-width="2" opacity="0">
+      <animate attributeName="opacity" values="0;0.8;0" dur="7s" begin="1s" repeatCount="indefinite"/>
+    </rect>
+    
+    <rect x="640" y="340" width="80" height="80" rx="8" fill="url(#albumCover5)"/>
+    <rect x="540" y="440" width="80" height="80" rx="8" fill="url(#albumCover6)"/>
+    <rect x="640" y="440" width="80" height="80" rx="8" fill="url(#albumCover7)"/>
+  </g>
+  
+  <!-- Мини-плеер с анимированными элементами -->
+  <rect x="280" y="560" width="470" height="80" rx="15" fill="#0A0D20"/>
+  <rect x="280" y="560" width="470" height="80" rx="15" stroke="url(#playerGlow)" stroke-width="1" opacity="0.5">
+    <animate attributeName="opacity" values="0.5;0.2;0.5" dur="4s" repeatCount="indefinite"/>
+  </rect>
+  
+  <rect x="300" y="580" width="40" height="40" rx="8" fill="url(#nowPlayingCover)"/>
+  <text x="350" y="595" font-family="Arial" font-size="14" fill="white">Starlight</text>
+  <text x="350" y="615" font-family="Arial" font-size="12" fill="#AAAAAA">Nebula Dreams</text>
+  
+  <g id="play-button">
+    <circle cx="500" cy="600" r="15" fill="url(#playButtonGradient)">
+      <animate attributeName="r" values="15;16;15" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <path d="M495 595L495 605L505 600L495 595" fill="white"/>
+  </g>
+  
+  <g id="progress-bar">
+    <line x1="580" y1="600" x2="680" y2="600" stroke="#333333" stroke-width="4" stroke-linecap="round"/>
+    <line x1="580" y1="600" x2="630" y2="600" stroke="url(#progressGradient)" stroke-width="4" stroke-linecap="round">
+      <animate attributeName="x2" values="630;645;630" dur="10s" repeatCount="indefinite"/>
+    </line>
+    <circle cx="630" cy="600" r="5" fill="#4169E1">
+      <animate attributeName="cx" values="630;645;630" dur="10s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Определение градиентов -->
+  <defs>
+    <!-- Основной космический градиент для фона -->
+    <linearGradient id="cosmicDeepGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0B1026"/>
+      <stop offset="50%" stop-color="#121B2F"/>
+      <stop offset="100%" stop-color="#0A0D20"/>
+    </linearGradient>
+    
+    <radialGradient id="glowRadial" cx="0.5" cy="0.5" r="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#4169E1" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#121B2F" stop-opacity="0"/>
+    </radialGradient>
+    
+    <radialGradient id="blueGlow" cx="0.5" cy="0.5" r="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#6495ED" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#6495ED" stop-opacity="0"/>
+    </radialGradient>
+    
+    <radialGradient id="purpleGlow" cx="0.5" cy="0.5" r="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#8A2BE2" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#8A2BE2" stop-opacity="0"/>
+    </radialGradient>
+    
+    <!-- Градиент для логотипа -->
+    <linearGradient id="logoGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4169E1"/>
+      <stop offset="100%" stop-color="#00BFFF"/>
+    </linearGradient>
+    
+    <!-- Градиент подсветки сайдбара -->
+    <linearGradient id="sidebarGlow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4169E1"/>
+      <stop offset="50%" stop-color="#8A2BE2"/>
+      <stop offset="100%" stop-color="#4169E1"/>
+    </linearGradient>
+    
+    <!-- Градиент для подсветки основного контента -->
+    <linearGradient id="contentGlow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4169E1"/>
+      <stop offset="50%" stop-color="#00BFFF"/>
+      <stop offset="100%" stop-color="#4169E1"/>
+    </linearGradient>
+    
+    <!-- Градиент для космической кнопки -->
+    <radialGradient id="cosmicButtonGradient" cx="0.5" cy="0.5" r="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#121B2F"/>
+      <stop offset="90%" stop-color="#0A0D20"/>
+    </radialGradient>
+    
+    <!-- Градиент для пульсации вокруг кнопки -->
+    <radialGradient id="pulseGradient" cx="0.5" cy="0.5" r="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#4169E1" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#4169E1" stop-opacity="0"/>
+    </radialGradient>
+    
+    <!-- Градиенты для волн -->
+    <linearGradient id="waveGradient1" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#4169E1"/>
+      <stop offset="50%" stop-color="#00BFFF"/>
+      <stop offset="100%" stop-color="#4169E1"/>
+    </linearGradient>
+    
+    <linearGradient id="waveGradient2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#8A2BE2"/>
+      <stop offset="50%" stop-color="#6495ED"/>
+      <stop offset="100%" stop-color="#8A2BE2"/>
+    </linearGradient>
+    
+    <linearGradient id="waveGradient3" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1E90FF"/>
+      <stop offset="50%" stop-color="#00BFFF"/>
+      <stop offset="100%" stop-color="#1E90FF"/>
+    </linearGradient>
+    
+    <!-- Градиенты для секций -->
+    <linearGradient id="tracksSectionGlow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4169E1"/>
+      <stop offset="50%" stop-color="#8A2BE2"/>
+      <stop offset="100%" stop-color="#4169E1"/>
+    </linearGradient>
+    
+    <linearGradient id="albumsSectionGlow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00BFFF"/>
+      <stop offset="50%" stop-color="#4169E1"/>
+      <stop offset="100%" stop-color="#00BFFF"/>
+    </linearGradient>
+    
+    <!-- Градиенты для обложек -->
+    <linearGradient id="albumCover1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4169E1"/>
+      <stop offset="100%" stop-color="#00BFFF"/>
+    </linearGradient>
+    
+    <linearGradient id="albumCover2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8A2BE2"/>
+      <stop offset="100%" stop-color="#6495ED"/>
+    </linearGradient>
+    
+    <linearGradient id="albumCover3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FF6B8B"/>
+      <stop offset="100%" stop-color="#1E90FF"/>
+    </linearGradient>
+    
+    <linearGradient id="albumCover4" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1E90FF"/>
+      <stop offset="100%" stop-color="#4169E1"/>
+    </linearGradient>
+    
+    <linearGradient id="albumCover5" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8A2BE2"/>
+      <stop offset="100%" stop-color="#4169E1"/>
+    </linearGradient>
+    
+    <linearGradient id="albumCover6" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00BFFF"/>
+      <stop offset="100%" stop-color="#1E90FF"/>
+    </linearGradient>
+    
+    <linearGradient id="albumCover7" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7B68EE"/>
+      <stop offset="100%" stop-color="#9370DB"/>
+    </linearGradient>
+    
+    <linearGradient id="nowPlayingCover" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00BFFF"/>
+      <stop offset="100%" stop-color="#4169E1"/>
+    </linearGradient>
+    
+    <!-- Градиент для подсветки трека при наведении -->
+    <linearGradient id="trackHoverGlow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#4169E1" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#4169E1" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#4169E1" stop-opacity="0.8"/>
+    </linearGradient>
+    
+    <!-- Градиент для подсветки альбома при наведении -->
+    <linearGradient id="albumHoverGlow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00BFFF" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#00BFFF" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#00BFFF" stop-opacity="0.8"/>
+    </linearGradient>
+    
+    <!-- Градиенты для плеера -->
+    <linearGradient id="playerGlow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#4169E1" stop-opacity="0.6"/>
+      <stop offset="50%" stop-color="#4169E1" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#4169E1" stop-opacity="0.6"/>
+    </linearGradient>
+    
+    <linearGradient id="playButtonGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4169E1"/>
+      <stop offset="100%" stop-color="#1E90FF"/>
+    </linearGradient>
+    
+    <linearGradient id="progressGradient" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#4169E1"/>
+      <stop offset="100%" stop-color="#00BFFF"/>
+    </linearGradient>
+  </defs>
+</svg> 

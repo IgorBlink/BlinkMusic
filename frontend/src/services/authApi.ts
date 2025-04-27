@@ -1,5 +1,5 @@
 import api from './api';
-import { setAccessToken, setRefreshToken, clearAuthData, setUserData } from '../utils/auth';
+import { setAccessToken, clearAuthData, setUserData } from '../utils/auth';
 
 interface AuthResponse {
   message: string;
