@@ -2,9 +2,8 @@ import axios from 'axios';
 import { Track, Album, Lyrics, Annotation, Playlist } from '../types/music';
 import { getAccessToken, setAccessToken, clearAuthData } from '../utils/auth';
 
-// Базовый URL API - используем window.env для получения переменных окружения в браузере
-// или устанавливаем значение по умолчанию
-const API_URL = 'http://150.241.95.14/api';
+// Базовый URL API - используем переменную окружения из Vite
+const API_URL = import.meta.env.VITE_API_URL || 'http://150.241.95.14/api';
 
 // Создаем экземпляр axios с базовым URL
 const api = axios.create({
