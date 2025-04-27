@@ -60,12 +60,16 @@ show_help() {
   echo "  up        Запустить контейнеры (по умолчанию)"
   echo "  down      Остановить контейнеры"
   echo "  logs      Показать логи контейнеров"
+  echo "  ssl       Инициализировать SSL-сертификаты для вашего домена"
+  echo "  ssl-renew Обновить SSL-сертификаты для вашего домена"
+  echo "  proxy     Показать только логи Nginx прокси"
   echo "  help      Показать эту справку"
   echo ""
   echo "Примеры:"
   echo "  ./run.sh build    # Собрать и запустить контейнеры"
   echo "  ./run.sh          # Запустить контейнеры"
   echo "  ./run.sh down     # Остановить контейнеры"
+  echo "  ./run.sh ssl      # Инициализировать SSL-сертификаты"
 }
 
 # Обработка аргументов командной строки
@@ -75,13 +79,13 @@ case "$1" in
     $DOCKER_COMPOSE_CMD build
     info "Запуск контейнеров..."
     $DOCKER_COMPOSE_CMD up -d
-    info "Контейнеры запущены! Открой http://localhost:3000 в браузере"
+    info "Контейнеры запущены! Открой http://localhost в браузере или https://blinkmusic.space (если настроены SSL и DNS)"
     $DOCKER_COMPOSE_CMD logs -f
     ;;
   "up" | "")
     info "Запуск контейнеров..."
     $DOCKER_COMPOSE_CMD up -d
-    info "Контейнеры запущены! Открой http://localhost:3000 в браузере"
+    info "Контейнеры запущены! Открой http://localhost в браузере или https://blinkmusic.space (если настроены SSL и DNS)"
     $DOCKER_COMPOSE_CMD logs -f
     ;;
   "down")
@@ -92,6 +96,25 @@ case "$1" in
   "logs")
     info "Вывод логов контейнеров..."
     $DOCKER_COMPOSE_CMD logs -f
+    ;;
+  "proxy")
+    info "Вывод логов Nginx..."
+    $DOCKER_COMPOSE_CMD logs -f nginx
+    ;;
+  "ssl")
+    info "Инициализация SSL-сертификатов..."
+    if [ -f ./init-letsencrypt.sh ]; then
+      chmod +x ./init-letsencrypt.sh
+      ./init-letsencrypt.sh
+    else
+      error "Файл init-letsencrypt.sh не найден. Убедитесь, что вы находитесь в корневой директории проекта."
+    fi
+    ;;
+  "ssl-renew")
+    info "Обновление SSL-сертификатов..."
+    $DOCKER_COMPOSE_CMD run --rm certbot renew
+    info "Перезапуск Nginx для применения новых сертификатов..."
+    $DOCKER_COMPOSE_CMD exec nginx nginx -s reload
     ;;
   "help" | "-h" | "--help")
     show_help

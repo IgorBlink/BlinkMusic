@@ -20,6 +20,7 @@
   <a href="#-backend">Backend</a> •
   <a href="#-stack">Stack</a> •
   <a href="#-docker">Docker</a> •
+  <a href="#-ssl">SSL & Domain</a> •
   <a href="#-russian">По-русски</a>
 </div>
 
@@ -105,6 +106,8 @@ GEMINI_API_KEY=your_gemini_api_key
 - **MongoDB** — NoSQL database for flexible data storage
 - **JWT** — Secure authentication and authorization
 - **External APIs** — Integration with music service providers
+- **Nginx** — High-performance web server for proxying and static file serving
+- **Certbot** — Automated SSL certificate management
 
 ## 🐳 Docker
 
@@ -117,6 +120,8 @@ GEMINI_API_KEY=your_gemini_api_key
 - `./backend` - Node.js API server
 - `compose.yaml` - Docker Compose configuration
 - `run.sh` - Convenient startup script
+- `./nginx` - Nginx configuration for proxying and HTTPS
+- `./certbot` - SSL certificates and validation files
 
 ### Quick Deployment with Docker
 
@@ -183,6 +188,56 @@ or
 ```bash
 docker compose down
 ```
+
+## 🔒 SSL & Domain
+
+BlinkMusic supports secure HTTPS connections and custom domain setup using Nginx and Let's Encrypt.
+
+### Setting up SSL Certificates
+
+1. Edit the `init-letsencrypt.sh` script and set your email address:
+```bash
+email="your-email@example.com" # Replace with your email
+```
+
+2. Make the script executable:
+```bash
+chmod +x init-letsencrypt.sh
+```
+
+3. Run the certificate initialization script:
+```bash
+./init-letsencrypt.sh
+```
+
+4. The script will:
+   - Configure Nginx for Let's Encrypt domain validation
+   - Obtain SSL certificates from Let's Encrypt
+   - Configure HTTPS with your new certificates
+   - Set up automatic certificate renewal
+
+### Domain Configuration
+
+The default configuration is set up for the domain `blinkmusic.space`. To use your own domain:
+
+1. Replace all instances of `blinkmusic.space` in nginx configuration files:
+```bash
+find ./nginx -type f -exec sed -i 's/blinkmusic.space/yourdomain.com/g' {} \;
+```
+
+2. Update the domains in the initialization script:
+```bash
+# Edit init-letsencrypt.sh
+domains=(yourdomain.com www.yourdomain.com)
+```
+
+3. Run the initialization script to get certificates for your domain.
+
+### Access Methods
+
+- **Domain Access**: https://blinkmusic.space (or your custom domain)
+- **IP Access**: http://your-server-ip - Automatically routes API requests to backend
+- **API Endpoint**: All requests to `/api/` are automatically routed to the backend
 
 <h2 id="-russian">🌌 По-русски</h2>
 
@@ -255,6 +310,20 @@ YOUTUBE_API_KEY=your_youtube_api_key
 GEMINI_API_KEY=your_gemini_api_key
 ```
 
+## 🛠️ Технологии
+
+- **React + TypeScript** — Для звездных UI-компонентов
+- **Vite** — Молниеносная космическая разработка
+- **Web Audio API** — Для межзвездной визуализации звука
+- **React Router** — Навигация по музыкальной вселенной
+- **Context API** — Управление состоянием между измерениями
+- **Node.js + Express** — Мощный бэкенд API-сервер
+- **MongoDB** — NoSQL база данных для гибкого хранения данных
+- **JWT** — Безопасная аутентификация и авторизация
+- **Внешние API** — Интеграция с провайдерами музыкальных сервисов
+- **Nginx** — Высокопроизводительный веб-сервер для проксирования и раздачи статических файлов
+- **Certbot** — Автоматизированное управление SSL-сертификатами
+
 ## 🐳 Docker
 
 ### Требования
@@ -266,6 +335,8 @@ GEMINI_API_KEY=your_gemini_api_key
 - `./backend` - Node.js API-сервер
 - `compose.yaml` - Конфигурация Docker Compose
 - `run.sh` - Удобный скрипт запуска
+- `./nginx` - Конфигурация Nginx для проксирования и HTTPS
+- `./certbot` - SSL-сертификаты и файлы валидации
 
 ### Быстрое развертывание с Docker
 
@@ -333,17 +404,55 @@ http://localhost:3000
 docker compose down
 ```
 
-## 🛠️ Технологии
+## 🔒 SSL и Домен
 
-- **React + TypeScript** — Для звездных UI-компонентов
-- **Vite** — Молниеносная космическая разработка
-- **Web Audio API** — Для межзвездной визуализации звука
-- **React Router** — Навигация по музыкальной вселенной
-- **Context API** — Управление состоянием между измерениями
-- **Node.js + Express** — Мощный бэкенд API-сервер
-- **MongoDB** — NoSQL база данных для гибкого хранения данных
-- **JWT** — Безопасная аутентификация и авторизация
-- **Внешние API** — Интеграция с провайдерами музыкальных сервисов
+BlinkMusic поддерживает безопасные HTTPS-соединения и настройку пользовательского домена с помощью Nginx и Let's Encrypt.
+
+### Настройка SSL-сертификатов
+
+1. Отредактируйте скрипт `init-letsencrypt.sh` и укажите ваш email:
+```bash
+email="your-email@example.com" # Замените на ваш email
+```
+
+2. Сделайте скрипт исполняемым:
+```bash
+chmod +x init-letsencrypt.sh
+```
+
+3. Запустите скрипт инициализации сертификатов:
+```bash
+./init-letsencrypt.sh
+```
+
+4. Скрипт выполнит:
+   - Настройку Nginx для валидации домена Let's Encrypt
+   - Получение SSL-сертификатов от Let's Encrypt
+   - Настройку HTTPS с вашими новыми сертификатами
+   - Настройку автоматического обновления сертификатов
+
+### Конфигурация домена
+
+Базовая конфигурация настроена для домена `blinkmusic.space`. Чтобы использовать свой домен:
+
+1. Замените все вхождения `blinkmusic.space` в конфигурационных файлах nginx:
+```bash
+find ./nginx -type f -exec sed -i 's/blinkmusic.space/вашдомен.com/g' {} \;
+```
+
+2. Обновите домены в скрипте инициализации:
+```bash
+# Отредактируйте init-letsencrypt.sh
+domains=(вашдомен.com www.вашдомен.com)
+```
+
+3. Запустите скрипт инициализации для получения сертификатов для вашего домена.
+
+### Методы доступа
+
+- **Доступ по домену**: https://blinkmusic.space (или ваш кастомный домен)
+- **Доступ по IP**: http://ip-вашего-сервера - Автоматически направляет API-запросы на бэкенд
+- **API-эндпойнт**: Все запросы к `/api/` автоматически направляются на бэкенд
 
 ---
 
