@@ -16,7 +16,8 @@
 
 <div align="center">
   <a href="#-features">Features</a> •
-  <a href="#-quickstart">Quickstart</a> •
+  <a href="#-frontend">Frontend</a> •
+  <a href="#-backend">Backend</a> •
   <a href="#-stack">Stack</a> •
   <a href="#-docker">Docker</a> •
   <a href="#-russian">По-русски</a>
@@ -50,6 +51,49 @@ npm run dev
 
 Visit `http://localhost:5173` to experience the cosmos.
 
+## 🎨 Frontend
+
+The frontend of BlinkMusic is built with React and Vite, offering a responsive and fast cosmic music experience:
+
+- Built with **React + TypeScript** for robust component architecture
+- Uses **Vite** for lightning-fast development and hot module replacement
+- Includes audio visualization features using **Web Audio API**
+- Implements **React Router** for seamless navigation
+- Uses **Context API** for cosmic state management across the application
+- Features a space-themed UI with reactive components
+
+## 🔌 Backend
+
+The backend of BlinkMusic is a stellar Node.js API that powers the music universe:
+
+- **Node.js** server providing REST API endpoints
+- **MongoDB** database for storing cosmic music data
+- **JWT Authentication** for secure access to the musical galaxy
+- **External API Integrations** with:
+  - **LastFM API** for music metadata
+  - **YouTube API** for streaming celestial sounds
+  - **Gemini API** for AI-powered lyric annotations
+- **Express.js** for routing through the sonic cosmos
+- **Real-time features** for synchronized lyric display
+
+### Environment Variables
+
+The backend starship is controlled via these cosmic coordinates:
+
+```
+PORT=5000
+NODE_ENV=development/production
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key
+JWT_EXPIRES_IN=7d
+REFRESH_TOKEN_SECRET=your_refresh_token_secret
+REFRESH_TOKEN_EXPIRES_IN=30d
+CORS_ORIGIN=http://localhost:3000
+LASTFM_API_KEY=your_lastfm_api_key
+YOUTUBE_API_KEY=your_youtube_api_key
+GEMINI_API_KEY=your_gemini_api_key
+```
+
 ## 🛠️ Stack
 
 - **React + TypeScript** — For stellar UI components
@@ -57,6 +101,10 @@ Visit `http://localhost:5173` to experience the cosmos.
 - **Web Audio API** — For interstellar sound visualization
 - **React Router** — Navigation through the musical universe
 - **Context API** — State management across the dimensions
+- **Node.js + Express** — Powerful backend API server
+- **MongoDB** — NoSQL database for flexible data storage
+- **JWT** — Secure authentication and authorization
+- **External APIs** — Integration with music service providers
 
 ## 🐳 Docker
 
@@ -67,7 +115,7 @@ Visit `http://localhost:5173` to experience the cosmos.
 ### Project Structure
 - `./frontend` - React application (Vite)
 - `./backend` - Node.js API server
-- `docker-compose.yml` - Docker Compose configuration
+- `compose.yaml` - Docker Compose configuration
 - `run.sh` - Convenient startup script
 
 ### Quick Deployment with Docker
@@ -105,18 +153,18 @@ cd BlinkMusic
 
 2. Build and launch containers:
 ```bash
-docker-compose build
-docker-compose up -d
+docker compose build
+docker compose up -d
 ```
 
 3. Check container status:
 ```bash
-docker-compose ps
+docker compose ps
 ```
 
 4. View logs:
 ```bash
-docker-compose logs -f
+docker compose logs -f
 ```
 
 5. Open the application in browser:
@@ -133,7 +181,7 @@ http://localhost:3000
 or
 
 ```bash
-docker-compose down
+docker compose down
 ```
 
 <h2 id="-russian">🌌 По-русски</h2>
@@ -164,6 +212,49 @@ npm run dev
 
 Откройте `http://localhost:5173`, чтобы испытать космос.
 
+## 🎨 Фронтенд
+
+Фронтенд BlinkMusic построен с использованием React и Vite, предлагая отзывчивый и быстрый космический музыкальный опыт:
+
+- Создан с использованием **React + TypeScript** для надежной архитектуры компонентов
+- Использует **Vite** для молниеносной разработки и горячей замены модулей
+- Включает функции визуализации звука с использованием **Web Audio API**
+- Реализует **React Router** для бесшовной навигации
+- Использует **Context API** для космического управления состоянием в приложении
+- Содержит космический UI с реактивными компонентами
+
+## 🔌 Бэкенд
+
+Бэкенд BlinkMusic — это звездный API на Node.js, который питает музыкальную вселенную:
+
+- **Node.js** сервер, предоставляющий конечные точки REST API
+- **MongoDB** база данных для хранения космических музыкальных данных
+- **JWT Аутентификация** для безопасного доступа к музыкальной галактике
+- **Интеграции с внешними API**:
+  - **LastFM API** для музыкальных метаданных
+  - **YouTube API** для стриминга небесных звуков
+  - **Gemini API** для аннотаций текстов песен с помощью ИИ
+- **Express.js** для маршрутизации через звуковой космос
+- **Функции реального времени** для синхронизированного отображения текстов
+
+### Переменные окружения
+
+Бэкенд-корабль управляется через эти космические координаты:
+
+```
+PORT=5000
+NODE_ENV=development/production
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key
+JWT_EXPIRES_IN=7d
+REFRESH_TOKEN_SECRET=your_refresh_token_secret
+REFRESH_TOKEN_EXPIRES_IN=30d
+CORS_ORIGIN=http://localhost:3000
+LASTFM_API_KEY=your_lastfm_api_key
+YOUTUBE_API_KEY=your_youtube_api_key
+GEMINI_API_KEY=your_gemini_api_key
+```
+
 ## 🐳 Docker
 
 ### Требования
@@ -173,7 +264,7 @@ npm run dev
 ### Структура проекта
 - `./frontend` - React приложение (Vite)
 - `./backend` - Node.js API-сервер
-- `docker-compose.yml` - Конфигурация Docker Compose
+- `compose.yaml` - Конфигурация Docker Compose
 - `run.sh` - Удобный скрипт запуска
 
 ### Быстрое развертывание с Docker
@@ -211,18 +302,18 @@ cd BlinkMusic
 
 2. Соберите и запустите контейнеры:
 ```bash
-docker-compose build
-docker-compose up -d
+docker compose build
+docker compose up -d
 ```
 
 3. Проверьте статус контейнеров:
 ```bash
-docker-compose ps
+docker compose ps
 ```
 
 4. Просмотр логов:
 ```bash
-docker-compose logs -f
+docker compose logs -f
 ```
 
 5. Откройте приложение в браузере:
@@ -239,7 +330,7 @@ http://localhost:3000
 или 
 
 ```bash
-docker-compose down
+docker compose down
 ```
 
 ## 🛠️ Технологии
@@ -249,6 +340,10 @@ docker-compose down
 - **Web Audio API** — Для межзвездной визуализации звука
 - **React Router** — Навигация по музыкальной вселенной
 - **Context API** — Управление состоянием между измерениями
+- **Node.js + Express** — Мощный бэкенд API-сервер
+- **MongoDB** — NoSQL база данных для гибкого хранения данных
+- **JWT** — Безопасная аутентификация и авторизация
+- **Внешние API** — Интеграция с провайдерами музыкальных сервисов
 
 ---
 

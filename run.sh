@@ -21,13 +21,22 @@ error() {
   echo -e "${RED}[ERROR]${NC} $1"
 }
 
-# Проверка наличия Docker и Docker Compose
+# Проверка наличия Docker
 if ! command -v docker &> /dev/null; then
   error "Docker не установлен. Пожалуйста, установите Docker перед использованием этого скрипта."
   exit 1
 fi
 
-if ! command -v docker-compose &> /dev/null; then
+# Проверка Docker Compose
+# Сначала пробуем новый формат команды
+if docker compose version &> /dev/null; then
+  DOCKER_COMPOSE_CMD="docker compose"
+  info "Используется Docker Compose V2 (встроенный в Docker CLI)"
+# Если новый формат не сработал, пробуем старый формат
+elif command -v docker-compose &> /dev/null; then
+  DOCKER_COMPOSE_CMD="docker-compose"
+  warn "Используется устаревший Docker Compose V1. Рекомендуется обновить Docker."
+else
   error "Docker Compose не установлен. Пожалуйста, установите Docker Compose перед использованием этого скрипта."
   exit 1
 fi
@@ -35,7 +44,7 @@ fi
 # Функция для остановки контейнеров при нажатии Ctrl+C
 cleanup() {
   info "Остановка контейнеров..."
-  docker-compose down
+  $DOCKER_COMPOSE_CMD down
   info "Контейнеры остановлены."
   exit 0
 }
@@ -63,26 +72,26 @@ show_help() {
 case "$1" in
   "build")
     info "Сборка контейнеров..."
-    docker-compose build
+    $DOCKER_COMPOSE_CMD build
     info "Запуск контейнеров..."
-    docker-compose up -d
+    $DOCKER_COMPOSE_CMD up -d
     info "Контейнеры запущены! Открой http://localhost:3000 в браузере"
-    docker-compose logs -f
+    $DOCKER_COMPOSE_CMD logs -f
     ;;
   "up" | "")
     info "Запуск контейнеров..."
-    docker-compose up -d
+    $DOCKER_COMPOSE_CMD up -d
     info "Контейнеры запущены! Открой http://localhost:3000 в браузере"
-    docker-compose logs -f
+    $DOCKER_COMPOSE_CMD logs -f
     ;;
   "down")
     info "Остановка контейнеров..."
-    docker-compose down
+    $DOCKER_COMPOSE_CMD down
     info "Контейнеры остановлены."
     ;;
   "logs")
     info "Вывод логов контейнеров..."
-    docker-compose logs -f
+    $DOCKER_COMPOSE_CMD logs -f
     ;;
   "help" | "-h" | "--help")
     show_help
