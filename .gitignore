@@ -4,7 +4,7 @@ node_modules/
 .pnp.js
 
 # Продакшн сборки
-/dist
+
 /build
 /frontend/dist
 /frontend/build
@@ -118,8 +118,6 @@ web_modules/
 
 # Nuxt.js build / generate output
 .nuxt
-dist
-
 # Gatsby files
 .cache/
 # Comment in the public line in if your project uses Gatsby and not Next.js
