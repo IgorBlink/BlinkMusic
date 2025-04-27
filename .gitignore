@@ -1,11 +1,57 @@
-# Logs
+# Зависимости
+node_modules/
+/.pnp
+.pnp.js
+
+# Продакшн сборки
+/dist
+/build
+/frontend/dist
+/frontend/build
+
+# Логи
 logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 lerna-debug.log*
-.pnpm-debug.log*
+
+# Окружение
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.production
+
+# Редакторы
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Системные файлы
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Тестирование
+/coverage
+
+# Специфичные для Docker
+.dockerignore
+docker-compose.override.yml
+
+# Временные файлы
+*.tmp
+*.bak
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
@@ -38,7 +84,6 @@ bower_components
 build/Release
 
 # Dependency directories
-node_modules/
 jspm_packages/
 
 # Snowpack dependency directory (https://snowpack.dev/)
@@ -70,21 +115,6 @@ web_modules/
 
 # Yarn Integrity file
 .yarn-integrity
-
-# dotenv environment variable files
-.env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
-
-# parcel-bundler cache (https://parceljs.org/)
-.cache
-.parcel-cache
-
-# Next.js build output
-.next
-out
 
 # Nuxt.js build / generate output
 .nuxt

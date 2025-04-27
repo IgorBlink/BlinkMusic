@@ -3,13 +3,21 @@ import { logger } from '../utils/logger';
 import Track, { ITrack } from '../models/Track';
 import dotenv from 'dotenv';
 import * as cheerio from 'cheerio';
+import { google } from 'googleapis';
 
 // Загружаем переменные окружения
 dotenv.config();
 
-// API ключ Last.fm из переменных окружения
+// API ключи из переменных окружения
 const LASTFM_API_KEY = process.env.LASTFM_API_KEY || '';
 const LASTFM_API_URL = 'https://ws.audioscrobbler.com/2.0/';
+const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY || '';
+
+// Инициализация YouTube API
+const youtube = google.youtube({
+  version: 'v3',
+  auth: YOUTUBE_API_KEY
+});
 
 // Интерфейсы для типизации ответов от Last.fm API
 interface LastFmTrack {
@@ -250,6 +258,67 @@ export class LastFmService {
   }
 
   /**
+   * Получает длительность YouTube видео по его URL или ID
+   * @param youtubeUrl URL или ID видео на YouTube
+   * @returns Длительность видео в миллисекундах или 0 в случае ошибки
+   */
+  async getYoutubeVideoDuration(youtubeUrl: string): Promise<number> {
+    try {
+      if (!YOUTUBE_API_KEY) {
+        logger.warn('YouTube API key is not set. Cannot get video duration.');
+        return 0;
+      }
+
+      // Извлекаем videoId из URL
+      let videoId = youtubeUrl;
+      
+      if (youtubeUrl.includes('youtube.com/watch')) {
+        const url = new URL(youtubeUrl);
+        videoId = url.searchParams.get('v') || '';
+      } else if (youtubeUrl.includes('youtu.be/')) {
+        videoId = youtubeUrl.split('youtu.be/')[1].split('?')[0];
+      }
+      
+      if (!videoId) {
+        logger.error(`Failed to extract video ID from YouTube URL: ${youtubeUrl}`);
+        return 0;
+      }
+      
+      // Запрашиваем информацию о видео через API YouTube
+      const response = await youtube.videos.list({
+        part: ['contentDetails'],
+        id: [videoId]
+      });
+      
+      if (response.data.items && response.data.items.length > 0) {
+        const durationString = response.data.items[0].contentDetails?.duration || '';
+        
+        // Конвертируем ISO 8601 формат (PT1H2M3S) в миллисекунды
+        if (durationString) {
+          // Регулярные выражения для извлечения часов, минут и секунд
+          const hours = durationString.match(/(\d+)H/);
+          const minutes = durationString.match(/(\d+)M/);
+          const seconds = durationString.match(/(\d+)S/);
+          
+          let totalMs = 0;
+          if (hours) totalMs += parseInt(hours[1]) * 3600000;
+          if (minutes) totalMs += parseInt(minutes[1]) * 60000;
+          if (seconds) totalMs += parseInt(seconds[1]) * 1000;
+          
+          logger.info(`Retrieved YouTube video duration for ${videoId}: ${totalMs}ms`);
+          return totalMs;
+        }
+      }
+      
+      logger.warn(`Could not retrieve duration for YouTube video: ${videoId}`);
+      return 0;
+    } catch (error) {
+      logger.error(`Error getting YouTube video duration: ${error}`);
+      return 0;
+    }
+  }
+
+  /**
    * Преобразование треков из формата Last.fm в модель нашего приложения
    * Без сохранения в БД
    */
@@ -370,11 +439,26 @@ export class LastFmService {
         
         // Получаем ссылку на YouTube видео для трека
         let audioUrl = '';
+        let trackDuration = item.duration ? parseInt(item.duration) * 1000 : 0;
+        
         try {
           const youtubeUrl = await this.getYoutubeUrlFromLastFmPage(item.url);
           if (youtubeUrl) {
             audioUrl = youtubeUrl;
             logger.info(`Используем YouTube URL для трека "${trackName}" by "${artistName}": ${audioUrl}`);
+            
+            // Получаем длительность YouTube видео, если ещё нет точных данных о длительности из Last.fm
+            if (!trackDuration || trackDuration === 0) {
+              try {
+                const videoDuration = await this.getYoutubeVideoDuration(youtubeUrl);
+                if (videoDuration > 0) {
+                  trackDuration = videoDuration;
+                  logger.info(`Получена длительность видео для трека "${trackName}": ${trackDuration}ms`);
+                }
+              } catch (durationError) {
+                logger.error(`Ошибка при получении длительности видео: ${durationError}`);
+              }
+            }
           } else {
             // Если не смогли найти YouTube-ссылку, используем ссылку на Last.fm
             audioUrl = item.url;
@@ -391,7 +475,7 @@ export class LastFmService {
           title: trackName,
           artist: artistName,
           album: albumNameFinal,
-          duration: item.duration ? parseInt(item.duration) * 1000 : 0,
+          duration: trackDuration, // Используем длительность из YouTube или Last.fm
           coverUrl,
           audioUrl, // Теперь это YouTube URL или Last.fm URL
           source: 'lastfm',

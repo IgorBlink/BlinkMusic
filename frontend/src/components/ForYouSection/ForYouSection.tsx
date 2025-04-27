@@ -55,13 +55,17 @@ const ForYouSection = () => {
       if (tracks && tracks.length > 0) {
         // Преобразуем треки к формату, ожидаемому компонентом MusicCard
         const mappedTracks = tracks.map(track => ({
-          id: track._id || track.id, // Используем _id из MongoDB или id, если _id не доступен
+          // Используем sourceId или комбинацию artist+title вместо генерации временного ID
+          id: track.sourceId || `${track.artist}-${track.title}`.replace(/\s+/g, '-').toLowerCase(),
+          // Исходные данные трека сохраняем для дальнейшей передачи в PlayerContext
+          originalTrack: track,
           title: track.title,
           artist: track.artist,
-          album: track.album,
+          album: track.album || '',
           albumArtist: track.artist,
           coverUrl: track.coverUrl || '/test-picture.png', // Используем изображение по умолчанию, если нет coverUrl
-          duration: track.duration,
+          // Конвертируем длительность из миллисекунд в секунды, если она больше 1000
+          duration: track.duration > 1000 ? Math.round(track.duration / 1000) : track.duration,
           audioUrl: track.audioUrl,
           // Свойства для оформления (в реальном API их может не быть)
           isNeon: Math.random() > 0.5,
@@ -78,6 +82,9 @@ const ForYouSection = () => {
         }));
         
         setRecommendedTracks(mappedTracks);
+        
+        // Сохраняем треки в localStorage для использования на странице трека
+        localStorage.setItem('recommendedTracks', JSON.stringify(tracks));
       } else {
         // Если треков нет или произошла ошибка
         console.log('Не удалось получить рекомендованные треки');
@@ -109,7 +116,7 @@ const ForYouSection = () => {
   // Рендер загрузчика с эффектом shimmer
   const renderShimmerLoader = () => {
     const shimmerCards = Array.from({ length: visibleCards }).map((_, index) => (
-      <div key={index} className="shimmer-card">
+      <div key={`shimmer-${index}-${Date.now()}`} className="shimmer-card">
         <div className="shimmer-cover"></div>
         <div className="shimmer-info">
           <div className="shimmer-title"></div>
@@ -156,8 +163,8 @@ const ForYouSection = () => {
         renderErrorMessage(error)
       ) : recommendedTracks.length > 0 ? (
         <div className="music-cards-container">
-          {recommendedTracks.map(item => (
-            <MusicCard key={item.id} music={item} />
+          {recommendedTracks.map((item, index) => (
+            <MusicCard key={item.id || `track-${index}-${Date.now()}`} music={item} />
           ))}
         </div>
       ) : (

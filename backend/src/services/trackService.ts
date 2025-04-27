@@ -294,8 +294,27 @@ export class TrackService {
           if (youtubeUrl) {
             logger.info(`Обновляем аудио-ссылку на YouTube URL для "${track.title}"`);
             track.audioUrl = youtubeUrl;
+            
             // Сохраняем изменения в базу данных
             await Track.findByIdAndUpdate(track._id, { audioUrl: youtubeUrl });
+            
+            // Проверяем наличие длительности и обновляем её при необходимости
+            if (!track.duration || track.duration === 0) {
+              try {
+                // Получаем длительность видео из YouTube
+                const videoDuration = await this.lastFmService.getYoutubeVideoDuration(youtubeUrl);
+                
+                if (videoDuration > 0) {
+                  logger.info(`Обновляем длительность трека "${track.title}" на ${videoDuration}ms из YouTube`);
+                  track.duration = videoDuration;
+                  
+                  // Сохраняем длительность в базу данных
+                  await Track.findByIdAndUpdate(track._id, { duration: videoDuration });
+                }
+              } catch (durationError) {
+                logger.error(`Ошибка при получении длительности видео: ${durationError}`);
+              }
+            }
           }
         } catch (error) {
           logger.error(`Ошибка при получении YouTube-ссылки: ${error}`);

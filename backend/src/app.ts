@@ -9,6 +9,7 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes';
 import trackRoutes from './routes/trackRoutes';
 import lyricsRoutes from './routes/lyricsRoutes';
+import annotationRoutes from './routes/annotationRoutes';
 
 // Загружаем переменные окружения из .env файла
 dotenv.config();
@@ -34,6 +35,7 @@ app.use(cors(corsOptions));
 app.use('/api/auth', authRoutes);
 app.use('/api/tracks', trackRoutes);
 app.use('/api/lyrics', lyricsRoutes);
+app.use('/api/annotations', annotationRoutes);
 
 // Обработка 404
 app.use((req, res) => {

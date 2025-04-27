@@ -16,6 +16,7 @@ export interface Track {
   audioSrc?: string;
   audioUrl?: string;
   sourceType?: AudioSourceType;
+  originalData?: any; // Оригинальные данные трека с API
 }
 
 interface PlayerContextProps {
@@ -423,6 +424,50 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   
   const loadTrackById = async (id: string): Promise<Track | null> => {
     try {
+      // Сначала проверяем, есть ли трек в localStorage
+      const cachedTracks = localStorage.getItem('recommendedTracks');
+      
+      if (cachedTracks) {
+        const tracks = JSON.parse(cachedTracks);
+        // Пытаемся найти трек по sourceId или id
+        const cachedTrack = tracks.find((track: any) => 
+          track.sourceId === id || 
+          track._id === id || 
+          track.id === id || 
+          `${track.artist}-${track.title}`.replace(/\s+/g, '-').toLowerCase() === id
+        );
+        
+        if (cachedTrack) {
+          console.log('Используем кэшированный трек из localStorage:', cachedTrack.title);
+          
+          // Определяем тип источника трека
+          const sourceUrl = cachedTrack.audioUrl || '';
+          const sourceType = detectSourceType(sourceUrl);
+          
+          // Конвертируем длительность из миллисекунд в секунды, если нужно
+          const duration = cachedTrack.duration > 1000 
+            ? Math.round(cachedTrack.duration / 1000) 
+            : cachedTrack.duration || 130;
+          
+          const track: Track = {
+            id: cachedTrack.sourceId || id,
+            title: cachedTrack.title || 'Неизвестный трек',
+            artist: cachedTrack.artist || 'Неизвестный исполнитель',
+            album: cachedTrack.album || 'Неизвестный альбом',
+            coverUrl: cachedTrack.coverUrl || '/test-picture.png',
+            duration: duration,
+            audioUrl: cachedTrack.audioUrl || DEMO_AUDIO_URL,
+            audioSrc: cachedTrack.audioUrl || DEMO_AUDIO_URL,
+            sourceType: sourceType,
+            originalData: cachedTrack
+          };
+          
+          setCurrentTrack(track);
+          return track;
+        }
+      }
+      
+      // Если трек не найден в localStorage, делаем запрос к API
       const trackData = await tracksApi.getById(id);
       
       const sourceUrl = trackData.audioUrl || '';
@@ -437,15 +482,22 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         console.log(`Определен источник трека: ${sourceType}`);
       }
       
+      // Конвертируем длительность из миллисекунд в секунды, если нужно
+      const duration = trackData.duration > 1000 
+        ? Math.round(trackData.duration / 1000) 
+        : trackData.duration || 130;
+      
       const track: Track = {
         id: trackData.id || trackData._id || id,
         title: trackData.title || 'Неизвестный трек',
         artist: trackData.artist || 'Неизвестный исполнитель',
         album: trackData.album || 'Неизвестный альбом',
-        duration: trackData.duration || 130,
+        duration: duration,
         audioUrl: validAudioUrl,
         audioSrc: validAudioUrl,
-        sourceType: sourceType
+        sourceType: sourceType,
+        coverUrl: trackData.coverUrl || '/test-picture.png',
+        originalData: trackData
       };
       
       setCurrentTrack(track);
@@ -460,7 +512,8 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         duration: 130,
         audioUrl: DEMO_AUDIO_URL,
         audioSrc: DEMO_AUDIO_URL,
-        sourceType: 'direct'
+        sourceType: 'direct',
+        coverUrl: '/test-picture.png'
       };
       
       setCurrentTrack(demoTrack);
@@ -477,15 +530,22 @@ export const PlayerProvider: React.FC<{ children: ReactNode }> = ({ children }) 
           const sourceUrl = track.audioUrl || '';
           const sourceType = detectSourceType(sourceUrl);
           
+          // Конвертируем длительность из миллисекунд в секунды, если нужно
+          const duration = track.duration > 1000 
+            ? Math.round(track.duration / 1000) 
+            : track.duration || 130;
+          
           return {
             id: track.id || track._id || `temp-${Date.now()}`,
             title: track.title || 'Демо-трек',
             artist: track.artist || 'Неизвестный исполнитель',
             album: track.album || 'Демо-альбом',
-            duration: track.duration || 130,
+            duration: duration,
             audioUrl: track.audioUrl || DEMO_AUDIO_URL,
             audioSrc: track.audioUrl || DEMO_AUDIO_URL,
-            sourceType: sourceType
+            coverUrl: track.coverUrl || '/test-picture.png',
+            sourceType: sourceType,
+            originalData: track
           };
         });
         

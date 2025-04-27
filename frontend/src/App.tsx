@@ -25,8 +25,7 @@ function App() {
       <PlayerProvider>
         <Router>
           <Routes>
-            {/* Публичные маршруты (доступны без авторизации) */}
-            <Route path="/landing" element={<LandingPage />} />
+         
             <Route path="/login" element={<AuthPage />} />
             <Route path="/register" element={<AuthPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
@@ -92,7 +91,6 @@ function App() {
             } />
             
             {/* Перенаправление для неизвестных маршрутов */}
-            <Route path="*" element={<Navigate to="/landing" replace />} />
           </Routes>
         </Router>
       </PlayerProvider>
