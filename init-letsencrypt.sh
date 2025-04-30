@@ -9,7 +9,7 @@ fi
 domains=(blinkmusic.space www.blinkmusic.space)
 rsa_key_size=4096
 data_path="./certbot"
-email="your-email@example.com" # Замените на свой email!
+email="admin@blinkmusic.space" # Замените на свой реальный email!
 staging=0 # Установите 1 для тестирования (без лимитов Let's Encrypt)
 
 if [ -d "$data_path" ]; then
@@ -26,7 +26,7 @@ if [ ! -d "$data_path/conf/live/$domains" ]; then
 fi
 
 echo "### Создание резервной копии текущей конфигурации Nginx ..."
-cp ./nginx/conf/default.conf ./nginx/conf/default.conf.bak
+cp ./nginx/conf/init-letsencrypt.conf ./nginx/conf/init-letsencrypt.conf.bak
 
 echo "### Подготовка временного файла конфигурации Nginx ..."
 cp ./nginx/conf/init-letsencrypt.conf ./nginx/conf/default.conf
