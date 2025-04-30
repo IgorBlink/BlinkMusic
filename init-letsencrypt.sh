@@ -60,44 +60,12 @@ if [ -d "$data_path/conf/live/${domains[0]}" ]; then
   echo "### Сертификаты успешно получены!"
   
   echo "### Создание финальной конфигурации Nginx с поддержкой SSL ..."
-  # Раскомментируем HTTPS серверный блок в конфигурации Nginx
-  sed -i 's/# server {/server {/' ./nginx/conf/default.conf
-  sed -i 's/# listen 443 ssl;/listen 443 ssl;/' ./nginx/conf/default.conf
-  sed -i 's/# http2 on;/http2 on;/' ./nginx/conf/default.conf
-  sed -i 's/# listen \[::\]:443 ssl;/listen [::]:443 ssl;/' ./nginx/conf/default.conf
-  sed -i 's/# server_name/server_name/' ./nginx/conf/default.conf
-  sed -i 's/# server_tokens/server_tokens/' ./nginx/conf/default.conf
-  sed -i 's/# ssl_certificate/ssl_certificate/' ./nginx/conf/default.conf
-  sed -i 's/# ssl_certificate_key/ssl_certificate_key/' ./nginx/conf/default.conf
-  sed -i 's/# ssl_trusted_certificate/ssl_trusted_certificate/' ./nginx/conf/default.conf
-  sed -i 's/# ssl_protocols/ssl_protocols/' ./nginx/conf/default.conf
-  sed -i 's/# ssl_prefer_server_ciphers/ssl_prefer_server_ciphers/' ./nginx/conf/default.conf
-  sed -i 's/# ssl_ciphers/ssl_ciphers/' ./nginx/conf/default.conf
-  sed -i 's/# ssl_session_cache/ssl_session_cache/' ./nginx/conf/default.conf
-  sed -i 's/# ssl_session_timeout/ssl_session_timeout/' ./nginx/conf/default.conf
-  sed -i 's/# ssl_session_tickets/ssl_session_tickets/' ./nginx/conf/default.conf
-  sed -i 's/# ssl_stapling/ssl_stapling/' ./nginx/conf/default.conf
-  sed -i 's/# ssl_stapling_verify/ssl_stapling_verify/' ./nginx/conf/default.conf
-  sed -i 's/# resolver/resolver/' ./nginx/conf/default.conf
-  sed -i 's/# resolver_timeout/resolver_timeout/' ./nginx/conf/default.conf
-  sed -i 's/# add_header/add_header/' ./nginx/conf/default.conf
-  sed -i 's/# location \/api\//location \/api\//' ./nginx/conf/default.conf
-  sed -i 's/# proxy_pass/proxy_pass/' ./nginx/conf/default.conf
-  sed -i 's/# proxy_http_version/proxy_http_version/' ./nginx/conf/default.conf
-  sed -i 's/# proxy_set_header/proxy_set_header/' ./nginx/conf/default.conf
-  sed -i 's/# proxy_cache_bypass/proxy_cache_bypass/' ./nginx/conf/default.conf
-  sed -i 's/# location \/ {/location \/ {/' ./nginx/conf/default.conf
-  sed -i 's/# }/}/' ./nginx/conf/default.conf
-  
-  # Раскомментируем перенаправление с HTTP на HTTPS
-  sed -i 's/# location \/ {/location \/ {/' ./nginx/conf/default.conf.tmp
-  sed -i 's/#     return 301 https:\/\/$host$request_uri;/    return 301 https:\/\/$host$request_uri;/' ./nginx/conf/default.conf
-  
-  # Закомментируем временные HTTP-проксирования в первом блоке
-  sed -i '/Временная конфигурация для HTTP/,/proxy_cache_bypass/s/^/#/' ./nginx/conf/default.conf
+  # Не требуется раскомментирование, т.к. файл уже содержит раскомментированные блоки
+  # Просто копируем основной файл конфигурации обратно
+  cp ./nginx/conf/init-letsencrypt.conf ./nginx/conf/default.conf
 else
   echo "### Ошибка! Сертификаты не получены. Возвращаем предыдущую конфигурацию Nginx ..."
-  cp ./nginx/conf/default.conf.bak ./nginx/conf/default.conf
+  cp ./nginx/conf/init-letsencrypt.conf.bak ./nginx/conf/default.conf
 fi
 
 # Перезапуск Nginx для применения новой конфигурации
